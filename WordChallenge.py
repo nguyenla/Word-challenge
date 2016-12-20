@@ -84,7 +84,7 @@ class Words:
 
 def main():
     example = Words()
-    print(example.generate_words("teaser"))
+    print(example.generate_words("houses"))
     # y = generate_n_letter_words("treads", 6)
     # for s in y:
     #     print(s)
