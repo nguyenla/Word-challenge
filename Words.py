@@ -54,6 +54,8 @@ class Words:
             else:
                 self.six_words[key].add(word)
         file6.close()
+        
+        self.allkeys = self.six_words.keys()
 
     def generate_words(self, word):
         all_words = {}
@@ -81,6 +83,10 @@ class Words:
                 if temp in self.six_words:
                     res = res | self.six_words[temp]
         return sorted(res)
+    
+    def play(self):
+        return 1
+
 
 def main():
     example = Words()
