@@ -15,16 +15,13 @@ class Game():
         self.master.title("Game")
         self.master.configure(background='#23B6C0')
 
-
-#score
+    #score
 
         self.score=Label(self.master, text='',foreground='blue',background='red')
         self.score.pack()
         self.score.place(x=50,y=50)
 
-
-
-#timer
+        #timer
         self.timer=Label(self.master,text="10",background='blue')
         self.timer.pack()
         self.timer.place(x=650,y=50)
@@ -38,7 +35,7 @@ class Game():
         bstyle=Style()
         bstyle.configure('B.TButton',background='red')
 
-        self.enter=Button(self.master,text="enter",width=5,command=self.enter)
+        self.enter=Button(self.master,text="enter",width=5,command=self.enter_function)
         self.enter.pack()
         self.enter.place(x=250, y=550,anchor=CENTER)
         self.enter.configure(style='B.TButton')
@@ -56,12 +53,12 @@ class Game():
         self.start.pack()
         self.start.place(x=150,y=550,anchor=CENTER)
 
-        #labels for letter
+        # labels for letter
 
         self.labels(self.master,20,6,400,60,60,65)
         self.labels(self.master,20,6,300,60,60,65)
 
-        #labels for words
+        # labels for words
         self.words3=[]
         for i in range (0, 10):
                 self.words3.append(self.labels(self.master,1,3,i*25+30,15,120,65))
@@ -76,7 +73,10 @@ class Game():
         words6=[]
         for i in range (0, 10):
             words6.append(self.labels(self.master,1,6,i*25+30,15,480,65))
-
+    
+        # binding keys to buttons
+        self.master.bind("<Return>", self.enter_function)
+    
     def register_controller(self, controller):
         self.controller = controller
 
@@ -112,7 +112,8 @@ class Game():
 
     # To-do: CATA please help me implement
     # This function takes the word from the upper level and send to the controller
-    def enter(self):
+    def enter_function(self, event = None):
+        self.controller.increase_score()
         print("Send a word to the controller")
 
     def shuffle(self):
