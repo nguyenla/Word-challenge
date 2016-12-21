@@ -1,5 +1,5 @@
-from tkinter import *
-from tkinter import ttk
+from Tkinter import *
+#from tkinter import ttk
 
 class LamApp:
     def __init__(self,master):
