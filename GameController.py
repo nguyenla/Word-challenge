@@ -14,10 +14,14 @@ class GameController:
     def send_curKey(self):
         self.view.display_curKey(self.get_curKey())
         
-    def increase_score(self):
-        self.score += 10
+    def play_word(self, word):
+        word_score = self.model.play_word(word)
+        if word_score > 0:
+            self.increase_score(word_score)
+    
+    def increase_score(self, word_score):
+        self.score += word_score
         self.view.update_score()
-        
     
 
 def main():

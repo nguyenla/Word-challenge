@@ -40,7 +40,7 @@ class Game():
         self.enter.place(x=250, y=550,anchor=CENTER)
         self.enter.configure(style='B.TButton')
 
-        self.shuffle=Button(self.master,text="shuffle",width=5, command=self.shuffle)
+        self.shuffle=Button(self.master,text="shuffle",width=5, command=self.shuffle_function)
         self.shuffle.pack()
         self.shuffle.configure(style='green.TButton')
         self.shuffle.place(x=350,y=550,anchor=CENTER)
@@ -76,6 +76,7 @@ class Game():
     
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
+        self.master.bind("<space>", self.shuffle_function)
     
     def register_controller(self, controller):
         self.controller = controller
@@ -112,13 +113,14 @@ class Game():
 
     # To-do: CATA please help me implement
     # This function takes the word from the upper level and send to the controller
-    def enter_function(self, event = None):
-        self.controller.increase_score()
+    def enter_function(self, event = None):        
+        # Get the word input by the player 
+        word = ""
+        self.controller.play_word(word)
         print("Send a word to the controller")
 
-    def shuffle(self):
+    def shuffle_function(self, event = None):
         print("shuffle")
-
 
     def generate(self):
         print("generate")
@@ -141,6 +143,12 @@ class Game():
             self.time_remaining -= 1
             self.master.after(1000, self.update_clock)
 
+    #def key(self, event):
+        # Make sure the frame is receiving input!
+        #self.master.focus_force()
+        #print("Pressed", event.keysym)
+    
+    
 def main():
     mygame=Game()
     mygame.master.mainloop()

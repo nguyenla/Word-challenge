@@ -4,6 +4,8 @@ from random import randint
 class GameModel:
     def __init__(self):
         self.words = Words()
+        
+        # All possible keys to use
         self.allKeys = []
         for k in self.words.allkeys:
             dic = self.words.generate_words(k)
@@ -11,19 +13,24 @@ class GameModel:
             if max_score_possible > 300:
                 self.allKeys.append(k)
         
-        # get first key word
+        # get a random key word to start the game
         rand = randint(0, len(self.allKeys) -1)
         self.curKey = self.allKeys[rand]
         self.allKeys.remove(self.curKey)
         
         self.dict = self.words.generate_words(self.curKey)
+        
+        # lists of words that can be generated from the current key
         self.three = self.dict[3]
         self.four = self.dict[4]
         self.five = self.dict[5]
         self.six = self.dict[6]
-        self.played = []
+        
+        # list of words that have already been played
+        self.played = [] 
+        
+        # total number of words that can be generated
         self.num_words = len(self.dict[3]) + len(self.dict[4]) + len(self.dict[5]) + len(self.dict[6])
-        self.score = 0
         
     
     def get_next_key(self):
@@ -41,7 +48,7 @@ class GameModel:
         self.num_words = len(self.dict[3]) + len(self.dict[4]) + len(self.dict[5]) + len(self.dict[6])
         self.played = []
     
-    # Return 1 and remove the word if it is valid and if it has not been played yet
+    # If the word is valid and if it has not been played yet, return the score
     # Return 0 if the word is valid but it has already been played
     # Return -1 if the word is not valid
     def play_word(self, word):
@@ -52,28 +59,25 @@ class GameModel:
             return 0
         if length == 3:
             if word in self.three:
-                self.score += 30
                 self.played.append(word)
                 self.three.remove(word)
-                return 1
+                return 30
         elif length == 4:
             if word in self.four:
-                self.score += 40
                 self.played.append(word)
                 self.four.remove(word)
-                return 1
+                return 40
         elif length == 5:
             if word in self.five:
-                self.score += 50
                 self.played.append(word)
                 self.five.remove(word)
-                return 1
+                return 50
         elif length == 6:
             if word in self.six:
-                self.score += 60
                 self.played.append(word)
                 self.six.remove(word)
-                return 1
+                return 60
+        return - 1
     
     # Check if a word can be formed by the letters from the key
     def is_valid(self, word):
@@ -110,7 +114,7 @@ def main():
                 game.get_next_key()
                 found = 0
                 total = game.num_words
-                print("Your score is: " + str(game.score))
+                #print("Your score is: " + str(game.score))
                 w = input("Good job! Next game: Type all the words that can be formed with the letters in the word: " + game.curKey)
             else:
                 w = input("Correct! You have found " + str(found) + " out of " + str(total) + " words. Type in another word:") 
