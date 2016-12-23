@@ -191,6 +191,7 @@ class Game():
                     if (let['text']=="_"):
                         let.configure(text=key)
                         break
+                break
        # self.enteredlet[i].configure(text=key)
         print("Pressed", event.keysym)
     
