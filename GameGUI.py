@@ -10,7 +10,9 @@ class Game():
         self.controller = None
         
          # labels for letter
+        self.randomlet=[]
         self.randomlet=self.labels(self.master,20,6,400,60,60,65)
+        self.enteredlet=[]
         self.enteredlet=self.labels(self.master,20,6,300,60,60,65)
         
     #main frame
@@ -32,14 +34,14 @@ class Game():
         self.timer.place(x=650,y=50)
         self.timer.configure(foreground='yellow')
 
-<<<<<<< HEAD
+
 
 
 #buttons
-=======
+
         # To-do: Review
         self.time_remaining = 120
->>>>>>> 1e3f6b08a6e24bb86fed85cd89afbe3d14b45d34
+
 
         #buttons
         bstyle=Style()
@@ -86,12 +88,9 @@ class Game():
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
         self.master.bind("<space>", self.shuffle_function)
-<<<<<<< HEAD
-        self.master.bind("A",self.type_character)
-=======
         self.master.bind("<Key>", self.key)
     
->>>>>>> 1e3f6b08a6e24bb86fed85cd89afbe3d14b45d34
+    
     def register_controller(self, controller):
         self.controller = controller
 
@@ -148,19 +147,17 @@ class Game():
 
     def update_score(self):
         new_score = self.controller.score
-<<<<<<< HEAD
         self.score.configure(text='Score: '+str(new_score))
 
 
     def update_clock(self, count):      
-      #  self.timer['text'] = count
+        self.timer['text'] = count
         if count > 0:
             print(count)
             self.master.after(1000, self.update_clock(count-1))
 
     #def key(self, event):
-=======
-        self.score.configure(text = 'Score: ' + str(new_score))
+        #self.score.configure(text = 'Score: ' + str(new_score))
 
     # To-do: Implement this method
     # Resetting the input area
@@ -184,9 +181,14 @@ class Game():
             self.timer.configure(text = str(mins) + ":" + secstr)
 
     def key(self, event):
->>>>>>> 1e3f6b08a6e24bb86fed85cd89afbe3d14b45d34
         # Make sure the frame is receiving input!
         #self.master.focus_force()
+        key=event.keysym
+        for let in self.enteredlet:
+            if (let['text']=="_"):
+                let.configure(text=key)
+                break
+       # self.enteredlet[i].configure(text=key)
         print("Pressed", event.keysym)
     
     
