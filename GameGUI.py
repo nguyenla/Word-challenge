@@ -22,21 +22,26 @@ class Game():
         self.master.configure(background='#23B6C0')
 
     #score
-
-        self.score=Label(self.master, text='',foreground='blue',background='red')
+        self.score=Label(self.master, text='Score: 0',foreground='black',background='red')
         self.score.pack()
         self.score.place(x=50,y=50)
 
         #timer
-        self.timer=Label(self.master,text="10",background='blue')
+        self.timer=Label(self.master,text="2:00",background='blue')
         self.timer.pack()
         self.timer.place(x=650,y=50)
         self.timer.configure(foreground='yellow')
 
+<<<<<<< HEAD
 
 
 #buttons
+=======
+        # To-do: Review
+        self.time_remaining = 120
+>>>>>>> 1e3f6b08a6e24bb86fed85cd89afbe3d14b45d34
 
+        #buttons
         bstyle=Style()
         bstyle.configure('B.TButton',background='red')
 
@@ -65,14 +70,14 @@ class Game():
         # labels for words
         self.words3=[]
         for i in range (0, 10):
-                self.words3.append(self.labels(self.master,1,3,i*25+30,15,120,65))
+            self.words3.append(self.labels(self.master,1,3,i*25+30,15,120,65))
         words4=[]
         for i in range (0, 10):
-                words4.append(self.labels(self.master,1,4,i*25+30,15,240,65))
+            words4.append(self.labels(self.master,1,4,i*25+30,15,240,65))
 
         words5=[]
         for i in range (0, 10):
-                words5.append(self.labels(self.master,1,5,i*25+30,15,360,65))
+            words5.append(self.labels(self.master,1,5,i*25+30,15,360,65))
 
         words6=[]
         for i in range (0, 10):
@@ -81,7 +86,12 @@ class Game():
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
         self.master.bind("<space>", self.shuffle_function)
+<<<<<<< HEAD
         self.master.bind("A",self.type_character)
+=======
+        self.master.bind("<Key>", self.key)
+    
+>>>>>>> 1e3f6b08a6e24bb86fed85cd89afbe3d14b45d34
     def register_controller(self, controller):
         self.controller = controller
 
@@ -108,7 +118,7 @@ class Game():
     # dist: distance between two adjacent columns
     # start: horizontal position of the first column
     # word: character to be displayed on the label
-    def labels(self,master,s, number,pos,dist,start,word):
+    def labels(self, master, s, number, pos, dist, start, word):
         labels=[]
         for i in range (0,number):
             labels.append(Label(master,text='_',padding=s))
@@ -133,10 +143,12 @@ class Game():
         print("shuffle")
 
     def generate(self):
+        self.controller.increase_time(3)
         print("generate")
 
     def update_score(self):
         new_score = self.controller.score
+<<<<<<< HEAD
         self.score.configure(text='Score: '+str(new_score))
 
 
@@ -147,9 +159,35 @@ class Game():
             self.master.after(1000, self.update_clock(count-1))
 
     #def key(self, event):
+=======
+        self.score.configure(text = 'Score: ' + str(new_score))
+
+    # To-do: Implement this method
+    # Resetting the input area
+    def reset_input(self):
+        print("Resetting input.")
+
+    def start_timer(self):
+        self.controller.start_timer()
+    
+    def display_time(self, time):
+        if time < 0:
+            self.timer.configure(text = "Time's Up!")
+        else:
+            mins = time // 60
+            secs = time % 60
+            secstr = ""
+            if secs < 10:
+                secstr = '0' + str(secs)
+            else:
+                secstr = str(secs)
+            self.timer.configure(text = str(mins) + ":" + secstr)
+
+    def key(self, event):
+>>>>>>> 1e3f6b08a6e24bb86fed85cd89afbe3d14b45d34
         # Make sure the frame is receiving input!
         #self.master.focus_force()
-        #print("Pressed", event.keysym)
+        print("Pressed", event.keysym)
     
     
 def main():

@@ -107,7 +107,7 @@ def main():
         if m == 0:
             #game.printAll()
             w = input(w + " has already been played. Type in another word:")
-        elif m == 1:
+        elif m > 1:
             #game.printAll()
             found += 1
             if found > 1:
