@@ -7,10 +7,14 @@ class GameController:
         self.score = 0
         self.view = Game()
         self.view.register_controller(self)
+        self.send_curKey()
         
     def get_curKey(self):
         return self.model.curKey
     
+    def get_letter(self):
+        self.view.type_character
+
     def send_curKey(self):
         self.view.display_curKey(self.get_curKey())
         

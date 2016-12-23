@@ -1,12 +1,18 @@
 from tkinter import *
 from tkinter.ttk import *
-
+from GameModel import *
+import sys
 class Game():
 
     def __init__(self):
+        self.model=GameModel()
         self.master = Tk()
         self.controller = None
-
+        
+         # labels for letter
+        self.randomlet=self.labels(self.master,20,6,400,60,60,65)
+        self.enteredlet=self.labels(self.master,20,6,300,60,60,65)
+        
     #main frame
         s=Style()
         s.theme_use('alt')
@@ -27,8 +33,7 @@ class Game():
         self.timer.place(x=650,y=50)
         self.timer.configure(foreground='yellow')
 
-# To-do: Review
-        self.time_remaining = 0
+
 
 #buttons
 
@@ -40,23 +45,22 @@ class Game():
         self.enter.place(x=250, y=550,anchor=CENTER)
         self.enter.configure(style='B.TButton')
 
-        self.shuffle=Button(self.master,text="shuffle",width=5, command=self.shuffle_function)
+        self.shuffle=Button(self.master,text="shuffle",width=5,command=self.display_curKey(self.model.curKey))
         self.shuffle.pack()
         self.shuffle.configure(style='green.TButton')
         self.shuffle.place(x=350,y=550,anchor=CENTER)
 
-        self.getnew=Button(self.master,text="New",width=5,command=self.generate)
+        self.getnew=Button(self.master,text="New",width=5)
         self.getnew.pack()
         self.getnew.place(x=450,y=550,anchor=CENTER)
 
-        self.start=Button(self.master,text="Start",width=5,command=self.start_timer)
+        self.start=Button(self.master,text="Start",width=5)
         self.start.pack()
         self.start.place(x=150,y=550,anchor=CENTER)
 
-        # labels for letter
-
-        self.labels(self.master,20,6,400,60,60,65)
-        self.labels(self.master,20,6,300,60,60,65)
+       
+      
+        
 
         # labels for words
         self.words3=[]
@@ -77,19 +81,25 @@ class Game():
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
         self.master.bind("<space>", self.shuffle_function)
-    
+        self.master.bind("A",self.type_character)
     def register_controller(self, controller):
         self.controller = controller
 
     # To-do: CATA please help me implement
     # key: 6-character key to be displayed on the lower level
-    def display_curKey(self, key):
-        print(key)
-   
+    def display_curKey(self,key):  
+        letters=list(key)
+        for i in range (0,6): 
+           self.randomlet[i].configure(text=letters[i])
+           
+    
+         
     # To-do: CATA please help me implement
     # This function displays a character on the upper level 
     def type_character(self):
-        print("Typing")
+        ch=sys.stdin.read(1)
+        
+        print(ch)
 
 
     # s: size of the label
@@ -129,19 +139,12 @@ class Game():
         new_score = self.controller.score
         self.score.configure(text='Score: '+str(new_score))
 
-    def start_timer(self):
-        self.update_clock(120)
 
-    def update_clock(self, remaining = None):
-        if remaining is not None:
-            self.time_remaining = remaining
-
-        if self.time_remaining <= 0:
-            self.timer.configure(text = "Time's Up")
-        else:
-            self.timer.configure(text = "%d" % self.time_remaining)
-            self.time_remaining -= 1
-            self.master.after(1000, self.update_clock)
+    def update_clock(self, count):      
+      #  self.timer['text'] = count
+        if count > 0:
+            print(count)
+            self.master.after(1000, self.update_clock(count-1))
 
     #def key(self, event):
         # Make sure the frame is receiving input!
@@ -152,5 +155,5 @@ class Game():
 def main():
     mygame=Game()
     mygame.master.mainloop()
-
+    
 if __name__ == "__main__": main()
