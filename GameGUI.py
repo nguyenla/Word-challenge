@@ -1,7 +1,9 @@
 from tkinter import *
 from tkinter.ttk import *
+from tkinter import messagebox
 from GameModel import *
 import sys
+from zipfile import sizeCentralDir
 class Game():
 
     def __init__(self):
@@ -73,17 +75,17 @@ class Game():
         self.words3=[]
         for i in range (0, 10):
             self.words3.append(self.labels(self.master,1,3,i*25+30,15,120,65))
-        words4=[]
+        self.words4=[]
         for i in range (0, 10):
-            words4.append(self.labels(self.master,1,4,i*25+30,15,240,65))
+            self.words4.append(self.labels(self.master,1,4,i*25+30,15,240,65))
 
-        words5=[]
+        self.words5=[]
         for i in range (0, 10):
-            words5.append(self.labels(self.master,1,5,i*25+30,15,360,65))
+            self.words5.append(self.labels(self.master,1,5,i*25+30,15,360,65))
 
-        words6=[]
+        self.words6=[]
         for i in range (0, 10):
-            words6.append(self.labels(self.master,1,6,i*25+30,15,480,65))
+            self.words6.append(self.labels(self.master,1,6,i*25+30,15,480,65))
     
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
@@ -134,8 +136,18 @@ class Game():
     # This function takes the word from the upper level and send to the controller
     def enter_function(self, event = None):        
         # Get the word input by the player 
-        word = ""
-        self.controller.play_word(word)
+        
+        word=[]
+        for let in self.enteredlet:
+            if(let['text']!='_'):
+                word.append(let)
+            else:break
+        if(len(word)==3):
+            for rows in self.words3:
+                if(rows[0]!='_'):
+                    rows=word
+        playword=word.join()
+        self.controller.play_word(playword)
         print("Send a word to the controller")
 
     def shuffle_function(self, event = None):
@@ -184,17 +196,21 @@ class Game():
         # Make sure the frame is receiving input!
         #self.master.focus_force()
         key=event.keysym
+        check=False
         for ran in self.randomlet:
             if (ran['text']==key):
-                ran.configure(text="_")
+                check=True
+                ran.configure(text="_",background='red')
+                
                 for let in self.enteredlet:
                     if (let['text']=="_"):
-                        let.configure(text=key)
+                        let.configure(text=key,background='green')
+                        
                         break
                 break
-       # self.enteredlet[i].configure(text=key)
-        print("Pressed", event.keysym)
-    
+        if (check==False):
+            mess=messagebox.showerror("Error","This letter is not available.\nTry again")
+        
     
 def main():
     mygame=Game()
