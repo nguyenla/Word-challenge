@@ -184,10 +184,13 @@ class Game():
         # Make sure the frame is receiving input!
         #self.master.focus_force()
         key=event.keysym
-        for let in self.enteredlet:
-            if (let['text']=="_"):
-                let.configure(text=key)
-                break
+        for ran in self.randomlet:
+            if (ran['text']==key):
+                ran.configure(text="_")
+                for let in self.enteredlet:
+                    if (let['text']=="_"):
+                        let.configure(text=key)
+                        break
        # self.enteredlet[i].configure(text=key)
         print("Pressed", event.keysym)
     
