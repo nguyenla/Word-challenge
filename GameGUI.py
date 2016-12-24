@@ -12,15 +12,15 @@ class Game():
         
          # labels for letter
         self.randomlet=[]
-        self.randomlet=self.labels(self.master,20,6,400,60,60,65,'#008B8B')
+        self.randomlet=self.labels(self.master,25,6,400,60,150,70,'#008B8B')
 
         self.enteredlet=[]
-        self.enteredlet=self.labels(self.master,20,6,300,60,60,65,'#FFEBCD')
+        self.enteredlet=self.labels(self.master,25,6,500,60,150,70,'#FFEBCD')
         
     #main frame
         s=Style()
         s.theme_use('alt')
-        self.master.minsize(width=800,height=600)
+        self.master.minsize(width=1000,height=700)
         self.master.resizable(0, 0)
         self.master.title("Game")
         self.master.configure(background='#23B6C0')
@@ -28,12 +28,12 @@ class Game():
     #score
         self.score=Label(self.master, text='Score: 0',foreground='black',background='red')
         self.score.pack()
-        self.score.place(x=50,y=50)
+        self.score.place(x=50,y=550)
 
         #timer
         self.timer=Label(self.master,text="2:00",background='blue')
         self.timer.pack()
-        self.timer.place(x=650,y=50)
+        self.timer.place(x=800,y=550)
         self.timer.configure(foreground='yellow')
 
 
@@ -49,43 +49,63 @@ class Game():
         bstyle=Style()
         bstyle.configure('B.TButton',background='red')
 
-        self.enter=Button(self.master,text="enter",width=5,command=self.enter_function)
+        self.enter=Button(self.master,text="enter",width=6,command=self.enter_function)
         self.enter.pack()
-        self.enter.place(x=250, y=550,anchor=CENTER)
+        self.enter.place(x=400, y=600,anchor=CENTER)
         self.enter.configure(style='B.TButton')
 
-        self.shuffle=Button(self.master,text="shuffle",width=5,command=self.display_curKey(self.model.curKey))
+        self.shuffle=Button(self.master,text="shuffle",width=6,command=self.display_curKey(self.model.curKey))
         self.shuffle.pack()
         self.shuffle.configure(style='green.TButton')
-        self.shuffle.place(x=350,y=550,anchor=CENTER)
+        self.shuffle.place(x=500,y=600,anchor=CENTER)
 
-        self.getnew=Button(self.master,text="New",width=5)
+        self.getnew=Button(self.master,text="New",width=6)
         self.getnew.pack()
-        self.getnew.place(x=450,y=550,anchor=CENTER)
+        self.getnew.place(x=600,y=600,anchor=CENTER)
 
-        self.start=Button(self.master,text="Start",width=5)
+        self.start=Button(self.master,text="Start",width=6)
         self.start.pack()
-        self.start.place(x=150,y=550,anchor=CENTER)
+        self.start.place(x=300,y=600,anchor=CENTER)
 
        
       
         
 
+
         # labels for words
         self.words3=[]
-        for i in range (0, 10):
-            self.words3.append(self.labels(self.master,1,3,i*25+30,15,120,65,'#CCFFFF'))
+        n3=len(self.model.three)
+        if(n3>10):
+            for i in range (0, 10):
+                self.words3.append(self.labels(self.master,1,3,i*25+30,15,200,65,'#CCFFFF'))
+            dif=n3-10
+            for i in range (0,dif):
+                self.words3.append(self.labels(self.master,1,3,i*25+30,15,280,65,'#CCFFFF'))
+        else:
+            for i in range (0, n3):
+                self.words3.append(self.labels(self.master,1,3,i*25+30,15,200,65,'#CCFFFF'))           
+       
         self.words4=[]
-        for i in range (0, 10):
-            self.words4.append(self.labels(self.master,1,4,i*25+30,15,240,65,'#CCFFFF'))
-
+        n4=len(self.model.four)
+        if(n4>10):
+            for i in range (0, 10):
+                self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
+            dif=n4-10
+            for i in range (0,dif):
+                 self.words4.append(self.labels(self.master,1,4,i*25+30,15,500,65,'#CCFFFF'))
+        else :
+            for i in range (0, n4):
+                self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
+      
         self.words5=[]
-        for i in range (0, 10):
-            self.words5.append(self.labels(self.master,1,5,i*25+30,15,360,65,'#CCFFFF'))
+        n5=len(self.model.five)
+        for i in range (0, n5):
+            self.words5.append(self.labels(self.master,1,5,i*25+30,15,600,65,'#CCFFFF'))
 
         self.words6=[]
-        for i in range (0, 10):
-            self.words6.append(self.labels(self.master,1,6,i*25+30,15,480,65,'#CCFFFF'))
+        n6=len(self.model.six)
+        for i in range (0, n6):
+            self.words6.append(self.labels(self.master,1,6,i*25+30,15,700,65,'#CCFFFF'))
     
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
