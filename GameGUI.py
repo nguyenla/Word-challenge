@@ -3,7 +3,6 @@ from tkinter.ttk import *
 from tkinter import messagebox
 from GameModel import *
 import sys
-from zipfile import sizeCentralDir
 class Game():
 
     def __init__(self):
@@ -13,9 +12,10 @@ class Game():
         
          # labels for letter
         self.randomlet=[]
-        self.randomlet=self.labels(self.master,20,6,400,60,60,65)
+        self.randomlet=self.labels(self.master,20,6,400,60,60,65,'#008B8B')
+
         self.enteredlet=[]
-        self.enteredlet=self.labels(self.master,20,6,300,60,60,65)
+        self.enteredlet=self.labels(self.master,20,6,300,60,60,65,'#FFEBCD')
         
     #main frame
         s=Style()
@@ -74,18 +74,18 @@ class Game():
         # labels for words
         self.words3=[]
         for i in range (0, 10):
-            self.words3.append(self.labels(self.master,1,3,i*25+30,15,120,65))
+            self.words3.append(self.labels(self.master,1,3,i*25+30,15,120,65,'#CCFFFF'))
         self.words4=[]
         for i in range (0, 10):
-            self.words4.append(self.labels(self.master,1,4,i*25+30,15,240,65))
+            self.words4.append(self.labels(self.master,1,4,i*25+30,15,240,65,'#CCFFFF'))
 
         self.words5=[]
         for i in range (0, 10):
-            self.words5.append(self.labels(self.master,1,5,i*25+30,15,360,65))
+            self.words5.append(self.labels(self.master,1,5,i*25+30,15,360,65,'#CCFFFF'))
 
         self.words6=[]
         for i in range (0, 10):
-            self.words6.append(self.labels(self.master,1,6,i*25+30,15,480,65))
+            self.words6.append(self.labels(self.master,1,6,i*25+30,15,480,65,'#CCFFFF'))
     
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
@@ -93,8 +93,12 @@ class Game():
         self.master.bind("<Key>", self.key)
     
     
+    
+    
     def register_controller(self, controller):
         self.controller = controller
+
+
 
     # To-do: CATA please help me implement
     # key: 6-character key to be displayed on the lower level
@@ -107,10 +111,18 @@ class Game():
          
     # To-do: CATA please help me implement
     # This function displays a character on the upper level 
-    def type_character(self):
-        ch=sys.stdin.read(1)
+    def type_character(self, word):
         
-        print(ch)
+        if(len(word)==3):
+            print(len(word))
+            for rows in self.words3:
+                if(rows[0]['text']=='_'):
+                    for i in range (0,3):
+                        key=word[i]
+                        print(key)
+                        rows[i].configure(text=key, background='#191970',foreground='white')
+                    break
+       
 
 
     # s: size of the label
@@ -119,7 +131,7 @@ class Game():
     # dist: distance between two adjacent columns
     # start: horizontal position of the first column
     # word: character to be displayed on the label
-    def labels(self, master, s, number, pos, dist, start, word):
+    def labels(self, master, s, number, pos, dist, start, word, color):
         labels=[]
         for i in range (0,number):
             labels.append(Label(master,text='_',padding=s))
@@ -129,27 +141,29 @@ class Game():
         for i in range (0,number):
             prev=prev+s+dist
             labels[i].place(x=prev,y=int(pos))
-            labels[i].configure(padding=s)
+            labels[i].configure(padding=s, background=color)
         return labels
 
     # To-do: CATA please help me implement
     # This function takes the word from the upper level and send to the controller
     def enter_function(self, event = None):        
         # Get the word input by the player 
-        
         word=[]
         for let in self.enteredlet:
-            if(let['text']!='_'):
-                word.append(let)
-            else:break
-        if(len(word)==3):
-            for rows in self.words3:
-                if(rows[0]!='_'):
-                    rows=word
-        playword=word.join()
-        self.controller.play_word(playword)
+            key=let['text']
+            if(key!='_'):
+                word.append(key)
+        playword=''
+        for i in range (0,len(word)):
+            playword=playword+word[i]
+        print(playword)
+        if (self.controller.play_word(playword)!=-1):
+            self.type_character(playword)
+            self.update_score
+        self.reset_input
         print("Send a word to the controller")
-
+        
+        
     def shuffle_function(self, event = None):
         print("shuffle")
 
@@ -168,13 +182,19 @@ class Game():
             print(count)
             self.master.after(1000, self.update_clock(count-1))
 
-    #def key(self, event):
-        #self.score.configure(text = 'Score: ' + str(new_score))
 
     # To-do: Implement this method
     # Resetting the input area
     def reset_input(self):
-        print("Resetting input.")
+        for let  in self.enteredlet:
+            key=let['text']
+            for word in self.randomlet:
+                if(word['text']=='_'):
+                    word.configure(text=key,background='#008B8B',foreground='white')
+                    let.configure(text='_',background= '#FFEBCD')
+                    break
+        
+        
 
     def start_timer(self):
         self.controller.start_timer()
@@ -192,6 +212,8 @@ class Game():
                 secstr = str(secs)
             self.timer.configure(text = str(mins) + ":" + secstr)
 
+
+
     def key(self, event):
         # Make sure the frame is receiving input!
         #self.master.focus_force()
@@ -200,16 +222,15 @@ class Game():
         for ran in self.randomlet:
             if (ran['text']==key):
                 check=True
-                ran.configure(text="_",background='red')
-                
+                ran.configure(text="_",background='#F8F8FF')
                 for let in self.enteredlet:
                     if (let['text']=="_"):
-                        let.configure(text=key,background='green')
+                        let.configure(text=key,background='pink',foreground='black')
                         
                         break
                 break
         if (check==False):
-            mess=messagebox.showerror("Error","This letter is not available.\nTry again")
+            messagebox.showerror("Error","This letter is not available.\nTry again")
         
     
 def main():

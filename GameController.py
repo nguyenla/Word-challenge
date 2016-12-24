@@ -25,6 +25,7 @@ class GameController:
         if word_score > 0:
             self.increase_score(word_score)
         self.view.reset_input()
+        return self.model.play_word(word)
     
     def increase_score(self, word_score):
         self.score += word_score
