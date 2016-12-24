@@ -57,7 +57,8 @@ class GameModel:
             return -1
         elif word in self.played:
             return 0
-        if length == 3:
+        
+        elif length == 3:
             if word in self.three:
                 self.played.append(word)
                 self.three.remove(word)

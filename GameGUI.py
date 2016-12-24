@@ -112,17 +112,34 @@ class Game():
     # To-do: CATA please help me implement
     # This function displays a character on the upper level 
     def type_character(self, word):
-        
         if(len(word)==3):
-            print(len(word))
             for rows in self.words3:
                 if(rows[0]['text']=='_'):
                     for i in range (0,3):
                         key=word[i]
-                        print(key)
                         rows[i].configure(text=key, background='#191970',foreground='white')
                     break
-       
+        if(len(word)==4):
+            for rows in self.words4:
+                if(rows[0]['text']=='_'):
+                    for i in range (0,4):
+                        key=word[i]
+                        rows[i].configure(text=key, background='#191970',foreground='white')
+                    break
+        if(len(word)==5):
+            for rows in self.words5:
+                if(rows[0]['text']=='_'):
+                    for i in range (0,5):
+                        key=word[i]
+                        rows[i].configure(text=key, background='#191970',foreground='white')
+                    break 
+        if(len(word)==6):
+            for rows in self.words6:
+                if(rows[0]['text']=='_'):
+                    for i in range (0,6):
+                        key=word[i]
+                        rows[i].configure(text=key, background='#191970',foreground='white')
+                    break               
 
 
     # s: size of the label
@@ -156,8 +173,9 @@ class Game():
         playword=''
         for i in range (0,len(word)):
             playword=playword+word[i]
-        print(playword)
-        if (self.controller.play_word(playword)!=-1):
+        val=self.controller.play_word(playword)
+        print(val)
+        if (val>=0): 
             self.type_character(playword)
             self.update_score
         self.reset_input
