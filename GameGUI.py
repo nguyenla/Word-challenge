@@ -2,7 +2,8 @@ from tkinter import *
 from tkinter.ttk import *
 from tkinter import messagebox
 from GameModel import *
-import sys
+import random
+
 class Game():
 
     def __init__(self):
@@ -10,7 +11,7 @@ class Game():
         self.master = Tk()
         self.controller = None
         
-         # labels for letter
+        # labels for letter
         self.randomlet=[]
         self.randomlet=self.labels(self.master,25,6,400,60,150,70,'#008B8B')
 
@@ -25,7 +26,8 @@ class Game():
         self.master.title("Game")
         self.master.configure(background='#23B6C0')
 
-    #score
+    # LABELS ON VIEW
+        #score
         self.score=Label(self.master, text='Score: 0',foreground='black',background='red')
         self.score.pack()
         self.score.place(x=50,y=550)
@@ -36,16 +38,8 @@ class Game():
         self.timer.place(x=800,y=550)
         self.timer.configure(foreground='yellow')
 
-
-
-
-#buttons
-
-        # To-do: Review
-        self.time_remaining = 120
-
-
-        #buttons
+        # BUTTONS ON VIEW
+        
         bstyle=Style()
         bstyle.configure('B.TButton',background='red')
 
@@ -59,17 +53,13 @@ class Game():
         self.shuffle.configure(style='green.TButton')
         self.shuffle.place(x=500,y=600,anchor=CENTER)
 
-        self.getnew=Button(self.master,text="New",width=6)
+        self.getnew=Button(self.master,text="New",width=6, command = self.get_new_key)
         self.getnew.pack()
         self.getnew.place(x=600,y=600,anchor=CENTER)
 
-        self.start=Button(self.master,text="Start",width=6)
+        self.start=Button(self.master,text="Start",width=6, command = self.start_timer)
         self.start.pack()
         self.start.place(x=300,y=600,anchor=CENTER)
-
-       
-      
-        
 
 
         # labels for words
@@ -92,7 +82,7 @@ class Game():
                 self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
             dif=n4-10
             for i in range (0,dif):
-                 self.words4.append(self.labels(self.master,1,4,i*25+30,15,500,65,'#CCFFFF'))
+                self.words4.append(self.labels(self.master,1,4,i*25+30,15,500,65,'#CCFFFF'))
         else :
             for i in range (0, n4):
                 self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
@@ -110,26 +100,25 @@ class Game():
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
         self.master.bind("<space>", self.shuffle_function)
+        self.master.bind("<BackSpace>", self.backspace_function)
         self.master.bind("<Key>", self.key)
     
     
-    
-    
+    # This function binds a controller to this view
     def register_controller(self, controller):
         self.controller = controller
 
 
 
-    # To-do: CATA please help me implement
     # key: 6-character key to be displayed on the lower level
-    def display_curKey(self,key):  
+    def display_curKey(self, key):  
         letters=list(key)
         for i in range (0,6): 
-           self.randomlet[i].configure(text=letters[i])
+            self.randomlet[i].configure(text=letters[i])
            
     
          
-    # To-do: CATA please help me implement
+    # TO-DO: Peer-review this function
     # This function displays a character on the upper level 
     def type_character(self, word):
         if(len(word)==3):
@@ -146,6 +135,7 @@ class Game():
                         key=word[i]
                         rows[i].configure(text=key, background='#191970',foreground='white')
                     break
+        
         if(len(word)==5):
             for rows in self.words5:
                 if(rows[0]['text']=='_'):
@@ -153,6 +143,7 @@ class Game():
                         key=word[i]
                         rows[i].configure(text=key, background='#191970',foreground='white')
                     break 
+        
         if(len(word)==6):
             for rows in self.words6:
                 if(rows[0]['text']=='_'):
@@ -160,6 +151,7 @@ class Game():
                         key=word[i]
                         rows[i].configure(text=key, background='#191970',foreground='white')
                     break               
+
 
 
     # s: size of the label
@@ -181,6 +173,8 @@ class Game():
             labels[i].configure(padding=s, background=color)
         return labels
 
+
+
     # To-do: CATA please help me implement
     # This function takes the word from the upper level and send to the controller
     def enter_function(self, event = None):        
@@ -192,29 +186,42 @@ class Game():
                 word.append(key)
         playword=''
         for i in range (0,len(word)):
-            playword=playword+word[i]
-        val=self.controller.play_word(playword)
+            playword = playword+word[i]
+        
+        val = self.controller.play_word(playword)
         print(val)
-        if (val>=0): 
-            self.type_character(playword)
-            self.update_score
-        self.reset_input
-        print("Send a word to the controller")
+      
+    
+    # TO-DO: implemented the backspace function
+    def backspace_function(self, event = None):
+        print("Removing the most recent character.")  
         
         
+    # TO-DO: implemented the shuffle function
     def shuffle_function(self, event = None):
         print("shuffle")
+        key = list(self.controller.get_curKey())
+        print(key)
+        random.shuffle(key)
+        shuffled = ''.join(key)
+        print(shuffled)
+        self.display_curKey(shuffled)
 
-    def generate(self):
+    def get_new_key(self):
         self.controller.increase_time(3)
         print("generate")
-
+    
+    
+    
+    # This function updates the score in the view to the most updated score in the controller
     def update_score(self):
         new_score = self.controller.score
-        self.score.configure(text='Score: '+str(new_score))
+        self.score.configure(text='Score: ' + str(new_score))
 
 
-    def update_clock(self, count):      
+
+    # This function updates the time in the view to the most updated time in the controller
+    def update_clock(self, count):
         self.timer['text'] = count
         if count > 0:
             print(count)
@@ -253,10 +260,8 @@ class Game():
 
 
     def key(self, event):
-        # Make sure the frame is receiving input!
-        #self.master.focus_force()
         key=event.keysym
-        check=False
+        check = False
         for ran in self.randomlet:
             if (ran['text']==key):
                 check=True
@@ -264,11 +269,12 @@ class Game():
                 for let in self.enteredlet:
                     if (let['text']=="_"):
                         let.configure(text=key,background='pink',foreground='black')
-                        
                         break
                 break
         if (check==False):
-            messagebox.showerror("Error","This letter is not available.\nTry again")
+            # Need some type of feedback later
+            print("Error","This letter is not available.\nTry again")
+            #messagebox.showerror("Error","This letter is not available.\nTry again")
         
     
 def main():
