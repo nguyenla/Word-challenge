@@ -26,6 +26,12 @@ class GameModel:
         self.five = self.dict[5]
         self.six = self.dict[6]
         
+        # these copies are never modified
+        self.three_fixed = list(self.dict[3])
+        self.four_fixed = list(self.dict[4])
+        self.five_fixed = list(self.dict[5])
+        self.six_fixed = list(self.dict[6])
+        
         # list of words that have already been played
         self.played = [] 
         
