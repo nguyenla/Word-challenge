@@ -13,10 +13,10 @@ class Game():
         
         # labels for letter
         self.randomlet=[]
-        self.randomlet=self.labels(self.master,25,6,400,60,150,70,'#008B8B')
+        self.randomlet=self.labels(self.master,25,6,500,60,150,70,'#008B8B')
 
         self.enteredlet=[]
-        self.enteredlet=self.labels(self.master,25,6,500,60,150,70,'#FFEBCD')
+        self.enteredlet=self.labels(self.master,25,6,400,60,150,70,'#FFEBCD')
         
     #main frame
         s=Style()
@@ -179,6 +179,7 @@ class Game():
     # This function takes the word from the upper level and send to the controller
     def enter_function(self, event = None):        
         # Get the word input by the player 
+        
         word=[]
         for let in self.enteredlet:
             key=let['text']
@@ -194,7 +195,24 @@ class Game():
     
     # TO-DO: implemented the backspace function
     def backspace_function(self, event = None):
-        print("Removing the most recent character.")  
+        for i in range(0,len(self.enteredlet)):
+            
+            if(self.enteredlet[i]['text']=="_" ):
+                for let in self.randomlet:
+                    if (let['text']=='_'):
+                        let.configure(text=self.enteredlet[i-1]['text'])
+                        break
+                self.enteredlet[i-1]['text']='_'
+                i-=1
+            elif(self.enteredlet[i]['text']!="_" and i==len(self.enteredlet)-1):
+                for let in self.randomlet:
+                    if (let['text']=='_'):
+                        let.configure(text=self.enteredlet[i]['text'])
+                        break
+                self.enteredlet[i]['text']='_'
+                i-=1
+        
+         
         
         
     # TO-DO: implemented the shuffle function
@@ -274,7 +292,7 @@ class Game():
         if (check==False):
             # Need some type of feedback later
             print("Error","This letter is not available.\nTry again")
-            #messagebox.showerror("Error","This letter is not available.\nTry again")
+            messagebox.showerror("Error","This letter is not available.\nTry again")
         
     
 def main():
