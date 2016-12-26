@@ -9,6 +9,7 @@ class GameController:
         self.time_remaining = 120
         self.view = Game()
         self.view.register_controller(self)
+        self.view.create_labels()
         self.send_curKey()
         
     def get_curKey(self):
@@ -21,10 +22,26 @@ class GameController:
     def send_curKey(self):
         self.view.display_curKey(self.get_curKey())
         
+    # This function plays a word to the model
     def play_word(self, word):
+        position = 0 # the position of the word in the corresponding sorted list, if it is in the list
+        if len(word) == 3:
+            if word in self.model.three_fixed:
+                position = self.model.three_fixed.index(word)
+        elif len(word) == 4:
+            if word in self.model.four_fixed:
+                position = self.model.four_fixed.index(word)
+        elif len(word) == 5:
+            if word in self.model.five_fixed:
+                position = self.model.five_fixed.index(word)
+        elif len(word) == 6:
+            if word in self.model.six_fixed:
+                position = self.model.six_fixed.index(word)
+        
         word_score = self.model.play_word(word)
         if word_score > 0:
-            self.view.type_character(word)
+            print(self.model.three)
+            self.view.type_character(word, position)
             self.increase_score(word_score)
         elif word_score == 0: # replace later with other feedback
             print("Word has already been played.")

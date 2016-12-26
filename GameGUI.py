@@ -64,38 +64,9 @@ class Game():
 
         # labels for words
         self.words3=[]
-        n3=len(self.model.three)
-        if(n3>10):
-            for i in range (0, 10):
-                self.words3.append(self.labels(self.master,1,3,i*25+30,15,200,65,'#CCFFFF'))
-            dif=n3-10
-            for i in range (0,dif):
-                self.words3.append(self.labels(self.master,1,3,i*25+30,15,280,65,'#CCFFFF'))
-        else:
-            for i in range (0, n3):
-                self.words3.append(self.labels(self.master,1,3,i*25+30,15,200,65,'#CCFFFF'))           
-       
         self.words4=[]
-        n4=len(self.model.four)
-        if(n4>10):
-            for i in range (0, 10):
-                self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
-            dif=n4-10
-            for i in range (0,dif):
-                self.words4.append(self.labels(self.master,1,4,i*25+30,15,500,65,'#CCFFFF'))
-        else :
-            for i in range (0, n4):
-                self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
-      
         self.words5=[]
-        n5=len(self.model.five)
-        for i in range (0, n5):
-            self.words5.append(self.labels(self.master,1,5,i*25+30,15,600,65,'#CCFFFF'))
-
         self.words6=[]
-        n6=len(self.model.six)
-        for i in range (0, n6):
-            self.words6.append(self.labels(self.master,1,6,i*25+30,15,700,65,'#CCFFFF'))
     
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
@@ -108,6 +79,36 @@ class Game():
     def register_controller(self, controller):
         self.controller = controller
 
+    def create_labels(self):
+        n3=len(self.controller.model.three)
+        if(n3>10):
+            for i in range (0, 10):
+                self.words3.append(self.labels(self.master,1,3,i*25+30,15,200,65,'#CCFFFF'))
+            dif=n3-10
+            for i in range (0,dif):
+                self.words3.append(self.labels(self.master,1,3,i*25+30,15,280,65,'#CCFFFF'))
+        else:
+            for i in range (0, n3):
+                self.words3.append(self.labels(self.master,1,3,i*25+30,15,200,65,'#CCFFFF'))           
+       
+        n4=len(self.controller.model.four)
+        if(n4>10):
+            for i in range (0, 10):
+                self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
+            dif=n4-10
+            for i in range (0,dif):
+                self.words4.append(self.labels(self.master,1,4,i*25+30,15,500,65,'#CCFFFF'))
+        else :
+            for i in range (0, n4):
+                self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
+      
+        n5=len(self.controller.model.five)
+        for i in range (0, n5):
+            self.words5.append(self.labels(self.master,1,5,i*25+30,15,600,65,'#CCFFFF'))
+
+        n6=len(self.controller.model.six)
+        for i in range (0, n6):
+            self.words6.append(self.labels(self.master,1,6,i*25+30,15,700,65,'#CCFFFF'))
 
 
     # key: 6-character key to be displayed on the lower level
@@ -120,37 +121,30 @@ class Game():
          
     # TO-DO: Peer-review this function
     # This function displays a character on the upper level 
-    def type_character(self, word):
+    def type_character(self, word, position):
         if(len(word)==3):
-            for rows in self.words3:
-                if(rows[0]['text']=='_'):
-                    for i in range (0,3):
-                        key=word[i]
-                        rows[i].configure(text=key, background='#191970',foreground='white')
-                    break
+            rows = self.words3[position]
+            for i in range (0,3):
+                key=word[i]
+                rows[i].configure(text=key, background='#191970',foreground='white')
+
         if(len(word)==4):
-            for rows in self.words4:
-                if(rows[0]['text']=='_'):
-                    for i in range (0,4):
-                        key=word[i]
-                        rows[i].configure(text=key, background='#191970',foreground='white')
-                    break
-        
+            rows = self.words4[position]
+            for i in range (0,4):
+                key=word[i]
+                rows[i].configure(text=key, background='#191970',foreground='white')
+
         if(len(word)==5):
-            for rows in self.words5:
-                if(rows[0]['text']=='_'):
-                    for i in range (0,5):
-                        key=word[i]
-                        rows[i].configure(text=key, background='#191970',foreground='white')
-                    break 
+            rows = self.words5[position]
+            for i in range (0,5):
+                key=word[i]
+                rows[i].configure(text=key, background='#191970',foreground='white')
         
         if(len(word)==6):
-            for rows in self.words6:
-                if(rows[0]['text']=='_'):
-                    for i in range (0,6):
-                        key=word[i]
-                        rows[i].configure(text=key, background='#191970',foreground='white')
-                    break               
+            rows = self.words6[position]
+            for i in range (0,6):
+                key=word[i]
+                rows[i].configure(text=key, background='#191970',foreground='white')
 
 
 
