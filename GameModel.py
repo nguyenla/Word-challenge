@@ -38,7 +38,7 @@ class GameModel:
         # total number of words that can be generated
         self.num_words = len(self.dict[3]) + len(self.dict[4]) + len(self.dict[5]) + len(self.dict[6])
         
-    
+    # This method gets the next key word for the game model
     def get_next_key(self):
         n = len(self.allKeys)
         rand = randint(0,n-1)
@@ -51,6 +51,12 @@ class GameModel:
         self.four = self.dict[4]
         self.five = self.dict[5]
         self.six = self.dict[6]
+        
+        self.three_fixed = list(self.dict[3])
+        self.four_fixed = list(self.dict[4])
+        self.five_fixed = list(self.dict[5])
+        self.six_fixed = list(self.dict[6])
+        
         self.num_words = len(self.dict[3]) + len(self.dict[4]) + len(self.dict[5]) + len(self.dict[6])
         self.played = []
     

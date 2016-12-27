@@ -42,27 +42,30 @@ class Game():
         
         bstyle=Style()
         bstyle.configure('B.TButton',background='red')
-
+        
+        # Enter button
         self.enter=Button(self.master,text="enter",width=6,command=self.enter_function)
         self.enter.pack()
         self.enter.place(x=400, y=600,anchor=CENTER)
         self.enter.configure(style='B.TButton')
 
+        # Shuffle button
         self.shuffle=Button(self.master,text="shuffle",width=6,command=self.display_curKey(self.model.curKey))
         self.shuffle.pack()
         self.shuffle.configure(style='green.TButton')
         self.shuffle.place(x=500,y=600,anchor=CENTER)
 
+        # New button
         self.getnew=Button(self.master,text="New",width=6, command = self.get_new_key)
         self.getnew.pack()
         self.getnew.place(x=600,y=600,anchor=CENTER)
 
+        # Start button
         self.start=Button(self.master,text="Start",width=6, command = self.start_timer)
         self.start.pack()
         self.start.place(x=300,y=600,anchor=CENTER)
 
-
-        # labels for words
+        # fields that hold labels for words of each length
         self.words3=[]
         self.words4=[]
         self.words5=[]
@@ -74,12 +77,37 @@ class Game():
         self.master.bind("<BackSpace>", self.backspace_function)
         self.master.bind("<Key>", self.key)
     
-    
     # This function binds a controller to this view
     def register_controller(self, controller):
         self.controller = controller
-
+        
+    
+    # Every time a new key is generated, this function is called to generate new blank labels
+    # that hold the place for the words that can be formed from the new key
     def create_labels(self):
+        # Destroy all the old labels and reset all the fields
+        for label in self.words3:
+            for l in label:
+                l.destroy()
+        
+        for label in self.words4:
+            for l in label:
+                l.destroy()
+        
+        for label in self.words5:
+            for l in label:
+                l.destroy()
+        
+        for label in self.words6:
+            for l in label:
+                l.destroy()
+        
+        self.words3 = []
+        self.words4 = []
+        self.words5 = []
+        self.words6 = []
+        
+        # Create label for 3-letter words
         n3=len(self.controller.model.three)
         if(n3>10):
             for i in range (0, 10):
@@ -91,6 +119,7 @@ class Game():
             for i in range (0, n3):
                 self.words3.append(self.labels(self.master,1,3,i*25+30,15,200,65,'#CCFFFF'))           
        
+        # Create label for 4-letter words
         n4=len(self.controller.model.four)
         if(n4>10):
             for i in range (0, 10):
@@ -102,21 +131,22 @@ class Game():
             for i in range (0, n4):
                 self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
       
+        # Create label for 5-letter words
         n5=len(self.controller.model.five)
         for i in range (0, n5):
             self.words5.append(self.labels(self.master,1,5,i*25+30,15,600,65,'#CCFFFF'))
 
+        # Create label for 6-letter words
         n6=len(self.controller.model.six)
         for i in range (0, n6):
             self.words6.append(self.labels(self.master,1,6,i*25+30,15,700,65,'#CCFFFF'))
 
 
-    # key: 6-character key to be displayed on the lower level
+    # This function is called to display a given 6-character key on the lower section
     def display_curKey(self, key):  
         letters=list(key)
         for i in range (0,6): 
             self.randomlet[i].configure(text=letters[i])
-           
     
          
     # TO-DO: Peer-review this function
@@ -173,7 +203,6 @@ class Game():
     # This function takes the word from the upper level and send to the controller
     def enter_function(self, event = None):        
         # Get the word input by the player 
-        
         word=[]
         for let in self.enteredlet:
             key=let['text']
@@ -204,25 +233,23 @@ class Game():
                         let.configure(text=self.enteredlet[i]['text'])
                         break
                 self.enteredlet[i]['text']='_'
-                i-=1
-        
-         
-        
-        
-    # TO-DO: implemented the shuffle function
+                i-=1   
+    
+    
+    
+    # This function shuffles the six letters of the key word and displays the shuffled key on the view
     def shuffle_function(self, event = None):
-        print("shuffle")
         key = list(self.controller.get_curKey())
-        print(key)
         random.shuffle(key)
         shuffled = ''.join(key)
-        print(shuffled)
         self.display_curKey(shuffled)
 
+
+
+    # This function signals the controller to generate a new key for the game 
     def get_new_key(self):
-        self.controller.increase_time(3)
-        print("generate")
-    
+        self.controller.get_new_key()
+        
     
     
     # This function updates the score in the view to the most updated score in the controller
@@ -240,7 +267,7 @@ class Game():
             self.master.after(1000, self.update_clock(count-1))
 
 
-    # To-do: Implement this method
+
     # Resetting the input area
     def reset_input(self):
         for let  in self.enteredlet:
@@ -252,10 +279,32 @@ class Game():
                     break
         
         
-
+    # This function listens to the key pressed and handles it accordingly
+    def key(self, event):
+        key=event.keysym
+        check = False
+        for ran in self.randomlet:
+            if (ran['text']==key):
+                check=True
+                ran.configure(text="_",background='#F8F8FF')
+                for let in self.enteredlet:
+                    if (let['text']=="_"):
+                        let.configure(text=key,background='pink',foreground='black')
+                        break
+                break
+        
+        if (check==False): # if the letter typed is not part of the keyword
+            # Need some type of feedback later
+            print("Error","This letter is not available.\nTry again")
+            #messagebox.showerror("Error","This letter is not available.\nTry again")
+        
+        
+    # This function starts the count-down timer 
     def start_timer(self):
         self.controller.start_timer()
     
+    
+    # This function displays a time (given in second) on the game view
     def display_time(self, time):
         if time < 0:
             self.timer.configure(text = "Time's Up!")
@@ -270,24 +319,6 @@ class Game():
             self.timer.configure(text = str(mins) + ":" + secstr)
 
 
-
-    def key(self, event):
-        key=event.keysym
-        check = False
-        for ran in self.randomlet:
-            if (ran['text']==key):
-                check=True
-                ran.configure(text="_",background='#F8F8FF')
-                for let in self.enteredlet:
-                    if (let['text']=="_"):
-                        let.configure(text=key,background='pink',foreground='black')
-                        break
-                break
-        if (check==False):
-            # Need some type of feedback later
-            print("Error","This letter is not available.\nTry again")
-            messagebox.showerror("Error","This letter is not available.\nTry again")
-        
     
 def main():
     mygame=Game()

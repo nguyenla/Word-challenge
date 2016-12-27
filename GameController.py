@@ -5,20 +5,18 @@ import time
 class GameController:
     def __init__(self):
         self.model = GameModel()
+        self.view = Game()
         self.score = 0
         self.time_remaining = 120
-        self.view = Game()
         self.view.register_controller(self)
         self.view.create_labels()
         self.send_curKey()
         
+    # Return the current key of the game
     def get_curKey(self):
         return self.model.curKey
-    
-    # TO-DO: Review this function. Uncertain where this is called
-    def get_letter(self):
-        self.view.type_character
 
+    # Display the current key of the game on the view
     def send_curKey(self):
         self.view.display_curKey(self.get_curKey())
         
@@ -71,10 +69,17 @@ class GameController:
             self.view.display_time(self.time_remaining)
             self.time_remaining -= 1
             self.view.master.after(1000, self.start_timer)
+    
+    # This function generates and displays a new key for the game
+    def get_new_key(self):
+        self.model.get_next_key() 
+        self.view.reset_input() # reset the input area on the game view
+        self.send_curKey() # display the new key on the game view
+        self.view.create_labels() # reset the labels that hold the words formed
+        
 
 def main():
     newGame = GameController()
-    #print(newGame.view.controller.get_curKey())
     newGame.send_curKey()
     newGame.view.master.mainloop()
    
