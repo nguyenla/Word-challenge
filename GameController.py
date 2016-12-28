@@ -5,6 +5,7 @@ import time
 class GameController:
     def __init__(self):
         self.model = GameModel()
+       
         self.view = Game()
         self.score = 0
         self.time_remaining = 120

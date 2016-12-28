@@ -5,16 +5,14 @@ from GameModel import *
 import random
 from PIL import Image, ImageTk
 from PIL import *
+
 class Game():
 
     def __init__(self):
         self.model=GameModel()
         self.master = Tk()
         self.controller = None
-        
-        #mainframe
-    #   self.filename=Image.open('/Users/Catalina/Documents/workspace/Word-Challenge/snowflakes.jpg','r')
-    #   self.filename2=ImageTk.PhotoImage(self.filename)
+       
         # Color values declared as constants
         self.COLOR_RANDOM = '#008B8B' # background color of the labels for the keyword
         self.COLOR_ENTER = '#FFEBCD' # background color of the labels for the letters entered
@@ -24,13 +22,18 @@ class Game():
     #main frame
         s=Style()
         s.theme_use('alt')
-        self.master.minsize(width=1000,height=700)
-        self.master.resizable(0, 0)
+        self.master.minsize(width=700,height=600)
+    #    self.master.resizable(0, 0)
         self.master.title("Game")
         self.master.configure(background='#23B6C0')
-        
-        #self.back=Label(self.master,image=self.filename2)
-    #   self.back.place(relwidth=1, relheight=0.7)
+     
+     
+        self.filename=Image.open('snowflakes.jpg','r')
+        self.resized=self.filename.resize((800,700))#resized image-gets the size of the whole frame
+        self.resized2=ImageTk.PhotoImage(self.resized)#creates the photo image from the file
+        self.back=Label(self.master,image=self.resized2,anchor=CENTER)#sets the image
+        self.back.pack(fil=BOTH,expand=YES)
+        self.back.bind('<Configure>',self.resize_frame)#binds the Configure to the resize_frame method
        
         # array of labels for letters of the key word
         self.randomlet=[]
@@ -93,6 +96,15 @@ class Game():
         self.master.bind("<BackSpace>", self.backspace_function)
         self.master.bind("<Tab>", self.get_new_key)
         self.master.bind("<Key>", self.key)
+        
+     # resize the image together with the background label and the window   
+    def resize_frame(self,event = None):
+
+        self.new_width=self.master.winfo_width()
+        self.new_height= self.master.winfo_height()
+        self.image=self.resized.resize((self.new_width,self.new_height),Image.ANTIALIAS)
+        self.photo=ImageTk.PhotoImage(self.image)
+        self.back.configure(image=self.photo)
     
     # This function binds a controller to this view
     def register_controller(self, controller):
@@ -207,13 +219,13 @@ class Game():
         labels=[]
         for i in range (0,number):
             labels.append(Label(master,text='_',anchor=CENTER,font=("Times New Roman",fs)))
-            labels[i].pack()
+            labels[i].pack(fill=BOTH,expand=YES)
             prev=start
             labels[0].place(x=prev, y= int(pos),relheight=1.5*s,relwidth=s)
         for i in range (0,number):
             prev=prev+s+dist
             labels[i].place(x=prev,y=int(pos),relheight=1.5*s, relwidth=s)
-            labels[i].configure(background=color,anchor=CENTER)
+            labels[i].configure(background=color)
         return labels
 
 
@@ -339,5 +351,4 @@ class Game():
 def main():
     mygame=Game()
     mygame.master.mainloop()
-    
 if __name__ == "__main__": main()
