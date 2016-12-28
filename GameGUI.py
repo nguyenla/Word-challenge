@@ -6,7 +6,7 @@ import random
 from PIL import Image, ImageTk
 from PIL import *
 
-class Game():
+class GameMainView():
 
     def __init__(self):
         self.model=GameModel()
@@ -365,6 +365,6 @@ class Game():
 
     
 def main():
-    mygame=Game()
+    mygame=GameMainView()
     mygame.master.mainloop()
 if __name__ == "__main__": main()
