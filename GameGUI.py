@@ -5,6 +5,7 @@ from GameModel import *
 import random
 from PIL import Image, ImageTk
 from PIL import *
+
 class Game():
 
     def __init__(self):
@@ -15,10 +16,15 @@ class Game():
         #mainframe
     #   self.filename=Image.open('/Users/Catalina/Documents/workspace/Word-Challenge/snowflakes.jpg','r')
     #   self.filename2=ImageTk.PhotoImage(self.filename)
+    
         # Color values declared as constants
-        self.COLOR_RANDOM = '#008B8B' # background color of the labels for the keyword
-        self.COLOR_ENTER = '#FFEBCD' # background color of the labels for the letters entered
-        self.COLOR_WORD = '#CCFFFF' # background color of the labels for the keyword
+        self.COLOR_RANDOM_EMPTY = '#F8F8FF' # background color of the labels for the keyword
+        self.COLOR_ENTER_EMPTY = '#FFEBCD' # background color of the labels for the letters entered
+        self.COLOR_WORD_EMPTY= '#CCFFFF' # background color of the labels for the keyword
+        
+        self.COLOR_RANDOM_FILLED = '#008B8B'
+        self.COLOR_ENTER_FILLED = 'pink'
+        self.COLOR_WORD_FILLED = '#191970'
         self.FS = 12 # font size of the letters
         
     #main frame
@@ -34,11 +40,11 @@ class Game():
        
         # array of labels for letters of the key word
         self.randomlet=[]
-        self.randomlet=self.labels(self.master,0.05,6,500,60,150,70,self.COLOR_RANDOM,25)
+        self.randomlet=self.labels(self.master,0.05,6,500,60,150,70,self.COLOR_RANDOM_FILLED,25)
 
         # array of labels for letters entered
         self.enteredlet=[]
-        self.enteredlet=self.labels(self.master,0.05,6,400,60,150,70,self.COLOR_ENTER,25)
+        self.enteredlet=self.labels(self.master,0.05,6,400,60,150,70,self.COLOR_ENTER_EMPTY,25)
     
     
 
@@ -129,35 +135,35 @@ class Game():
         n3 = len(self.controller.model.three)
         if n3 > 10:
             for i in range (0, 10):
-                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 30, 15, 200, 65, self.COLOR_WORD, self.FS))
+                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 30, 15, 200, 65, self.COLOR_WORD_EMPTY, self.FS))
             dif=n3-10
             for i in range (0,dif):
-                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 30, 15, 280, 65, self.COLOR_WORD, self.FS))
+                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 30, 15, 280, 65, self.COLOR_WORD_EMPTY, self.FS))
         else:
             for i in range (0, n3):
-                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 30, 15, 200, 65, self.COLOR_WORD, self.FS))
+                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 30, 15, 200, 65, self.COLOR_WORD_EMPTY, self.FS))
        
         # Create label for 4-letter words
         n4=len(self.controller.model.four)
         if n4 > 10:
             for i in range (0, 10):
-                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 30, 15, 400, 65, self.COLOR_WORD, self.FS))
+                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 30, 15, 400, 65, self.COLOR_WORD_EMPTY, self.FS))
             dif=n4-10
             for i in range (0,dif):
-                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 30, 15, 500, 65, self.COLOR_WORD, self.FS))
+                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 30, 15, 500, 65, self.COLOR_WORD_EMPTY, self.FS))
         else :
             for i in range (0, n4):
-                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 30, 15, 400, 65, self.COLOR_WORD, self.FS))
+                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 30, 15, 400, 65, self.COLOR_WORD_EMPTY, self.FS))
       
         # Create label for 5-letter words
         n5 = len(self.controller.model.five)
         for i in range (0, n5):
-            self.words5.append(self.labels(self.master, label_size, 5, i*25 + 30, 15, 600, 65, self.COLOR_WORD, self.FS))
+            self.words5.append(self.labels(self.master, label_size, 5, i*25 + 30, 15, 600, 65, self.COLOR_WORD_EMPTY, self.FS))
 
         # Create label for 6-letter words
         n6 = len(self.controller.model.six)
         for i in range (0, n6):
-            self.words6.append(self.labels(self.master, label_size, 6, i*25 + 30, 15, 700, 65, self.COLOR_WORD, self.FS))
+            self.words6.append(self.labels(self.master, label_size, 6, i*25 + 30, 15, 700, 65, self.COLOR_WORD_EMPTY, self.FS))
 
 
 
@@ -175,25 +181,25 @@ class Game():
             rows = self.words3[position]
             for i in range (0,3):
                 key=word[i]
-                rows[i].configure(text=key, background='#191970',foreground='white')
+                rows[i].configure(text=key, background = self.COLOR_WORD_FILLED, foreground='white')
 
         if len(word) == 4:
             rows = self.words4[position]
             for i in range (0,4):
                 key=word[i]
-                rows[i].configure(text=key, background='#191970',foreground='white')
+                rows[i].configure(text=key, background = self.COLOR_WORD_FILLED, foreground='white')
 
-        if(len(word)==5):
+        if len(word) == 5:
             rows = self.words5[position]
             for i in range (0,5):
                 key=word[i]
-                rows[i].configure(text=key, background='#191970',foreground='white')
+                rows[i].configure(text=key, background = self.COLOR_WORD_FILLED, foreground='white')
         
-        if(len(word)==6):
+        if len(word) == 6:
             rows = self.words6[position]
             for i in range (0,6):
                 key=word[i]
-                rows[i].configure(text=key, background='#191970',foreground='white')
+                rows[i].configure(text=key, background = self.COLOR_WORD_FILLED, foreground='white')
 
 
 
@@ -203,12 +209,13 @@ class Game():
     # dist: distance between two adjacent columns
     # start: horizontal position of the first column
     # word: character to be displayed on the label
-    def labels(self, master, s, number, pos, dist, start, word, color,fs):
+    # fs: font size
+    def labels(self, master, s, number, pos, dist, start, word, color, fs):
         labels=[]
         for i in range (0,number):
-            labels.append(Label(master,text='_',anchor=CENTER,font=("Times New Roman",fs)))
+            labels.append(Label(master,text='_',anchor=CENTER,font=("Times New Roman", fs)))
             labels[i].pack()
-            prev=start
+            prev = start
             labels[0].place(x=prev, y= int(pos),relheight=1.5*s,relwidth=s)
         for i in range (0,number):
             prev=prev+s+dist
@@ -217,6 +224,7 @@ class Game():
         return labels
 
 
+    # This function takes the letters entered and forms a word to send to the controller 
     def enter_function(self, event = None):        
         # Get the word input by the player 
         word=[]
@@ -224,9 +232,11 @@ class Game():
             key=let['text']
             if(key!='_'):
                 word.append(key)
+        
+        # Form the word
         playword=''
         for i in range (0,len(word)):
-            playword = playword+word[i]
+            playword = playword + word[i]
         
         self.controller.play_word(playword)
       
@@ -235,21 +245,25 @@ class Game():
     # This function removes the most recent letter typed in and put it back to the lower section
     def backspace_function(self, event = None):
         for i in range(0, len(self.enteredlet)):
-            if(self.enteredlet[i]['text']=="_" ):
+            # if there is a '_' in the entered word
+            if self.enteredlet[i]['text'] == "_":
                 for let in self.randomlet:
-                    if (let['text']=='_'):
+                    if let['text'] == '_':
                         let.configure(text=self.enteredlet[i-1]['text'])
-                        break
-                self.enteredlet[i-1]['text']='_'
-                i-=1
-            elif(self.enteredlet[i]['text']!="_" and i==len(self.enteredlet)-1):
+                        let.configure(background = self.COLOR_RANDOM_FILLED)
+                        self.enteredlet[i-1]['text'] = '_'
+                        self.enteredlet[i-1]['background'] = self.COLOR_ENTER_EMPTY
+                        return
+            
+            # special case: if all six letters have been used
+            elif self.enteredlet[i]['text'] != "_" and i == len(self.enteredlet) - 1:
                 for let in self.randomlet:
-                    if (let['text']=='_'):
+                    if let['text'] == '_':
                         let.configure(text=self.enteredlet[i]['text'])
-                        break
-                self.enteredlet[i]['text']='_'
-                i-=1   
-    
+                        let.configure(background = self.COLOR_RANDOM_FILLED)
+                        self.enteredlet[i]['text']='_'
+                        self.enteredlet[i]['background'] = self.COLOR_ENTER_EMPTY
+                        return
     
     
     # This function shuffles the six letters of the key word and displays the shuffled key on the view
@@ -284,32 +298,32 @@ class Game():
 
     # Resetting the input area
     def reset_input(self):
-        for let  in self.enteredlet:
-            key=let['text']
+        for let in self.enteredlet:
+            key = let['text']
             for word in self.randomlet:
-                if(word['text']=='_'):
-                    word.configure(text = key, background = self.COLOR_RANDOM, foreground='white')
-                    let.configure(text = '_', background = self.COLOR_ENTER)
+                if word['text'] == '_':
+                    word.configure(text = key, background = self.COLOR_RANDOM_FILLED, foreground='black')
+                    let.configure(text = '_', background = self.COLOR_ENTER_EMPTY)
                     break
         
         
     # This function listens to the key pressed and handles it accordingly
     def key(self, event):
-        key=event.keysym
+        key = event.keysym
         check = False
         for ran in self.randomlet:
-            if (ran['text']==key):
-                check=True
-                ran.configure(text = "_", background='#F8F8FF')
+            if ran['text'] == key:
+                check = True
+                ran.configure(text = "_", background = self.COLOR_RANDOM_EMPTY)
                 for let in self.enteredlet:
-                    if (let['text']=="_"):
-                        let.configure(text=key,background='pink',foreground='black')
+                    if (let['text'] == "_"):
+                        let.configure(text=key, background = self.COLOR_ENTER_FILLED, foreground='black')
                         break
                 break
         
-        if (check==False): # if the letter typed is not part of the keyword
+        if check == False: # if the letter typed is not part of the keyword
             # Need some type of feedback later
-            print("Error","This letter is not available.\nTry again")
+            print("Error", "This letter is not available.\nTry again")
             #messagebox.showerror("Error","This letter is not available.\nTry again")
         
         
