@@ -36,9 +36,12 @@ class GameController:
             if word in self.model.six_fixed:
                 position = self.model.six_fixed.index(word)
         
+        # Increase the score and the time remaining
         word_score = self.model.play_word(word)
         if word_score > 0:
             print(self.model.three)
+            if word_score > 30:
+                self.increase_time(word_score // 10)
             self.view.type_character(word, position)
             self.increase_score(word_score)
         elif word_score == 0: # replace later with other feedback
@@ -61,7 +64,7 @@ class GameController:
         self.view.display_time(self.time_remaining)
     
     
-    # TO-DO: Investigate a better way to do timer
+    # This function starts the timer
     def start_timer(self):
         if self.time_remaining <= 0:
             self.view.display_time(-1)
@@ -80,7 +83,6 @@ class GameController:
 
 def main():
     newGame = GameController()
-    newGame.send_curKey()
     newGame.view.master.mainloop()
    
 

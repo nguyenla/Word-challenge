@@ -11,12 +11,19 @@ class Game():
         self.master = Tk()
         self.controller = None
         
-        # labels for letter
+        # Color values declared as constants
+        self.COLOR_RANDOM = '#008B8B' # background color of the labels for the keyword
+        self.COLOR_ENTER = '#FFEBCD' # background color of the labels for the letters entered
+        self.COLOR_WORD = '#CCFFFF' # background color of the labels for the keyword
+        
+        
+        # array of labels for letters of the key word
         self.randomlet=[]
-        self.randomlet=self.labels(self.master,25,6,500,60,150,70,'#008B8B')
+        self.randomlet=self.labels(self.master,25,6,500,60,150,70, self.COLOR_RANDOM)
 
+        # array of labels for letters entered
         self.enteredlet=[]
-        self.enteredlet=self.labels(self.master,25,6,400,60,150,70,'#FFEBCD')
+        self.enteredlet=self.labels(self.master,25,6,400,60,150,70, self.COLOR_ENTER)
         
     #main frame
         s=Style()
@@ -44,19 +51,19 @@ class Game():
         bstyle.configure('B.TButton',background='red')
         
         # Enter button
-        self.enter=Button(self.master,text="enter",width=6,command=self.enter_function)
+        self.enter=Button(self.master,text="enter",width=6)
         self.enter.pack()
         self.enter.place(x=400, y=600,anchor=CENTER)
         self.enter.configure(style='B.TButton')
 
         # Shuffle button
-        self.shuffle=Button(self.master,text="shuffle",width=6,command=self.display_curKey(self.model.curKey))
+        self.shuffle=Button(self.master,text="shuffle",width=6)
         self.shuffle.pack()
         self.shuffle.configure(style='green.TButton')
         self.shuffle.place(x=500,y=600,anchor=CENTER)
 
         # New button
-        self.getnew=Button(self.master,text="New",width=6, command = self.get_new_key)
+        self.getnew=Button(self.master,text="New",width=6)
         self.getnew.pack()
         self.getnew.place(x=600,y=600,anchor=CENTER)
 
@@ -75,6 +82,7 @@ class Game():
         self.master.bind("<Return>", self.enter_function)
         self.master.bind("<space>", self.shuffle_function)
         self.master.bind("<BackSpace>", self.backspace_function)
+        self.master.bind("<Tab>", self.get_new_key)
         self.master.bind("<Key>", self.key)
     
     # This function binds a controller to this view
@@ -108,43 +116,43 @@ class Game():
         self.words6 = []
         
         # Create label for 3-letter words
-        n3=len(self.controller.model.three)
-        if(n3>10):
+        n3 = len(self.controller.model.three)
+        if n3 > 10:
             for i in range (0, 10):
-                self.words3.append(self.labels(self.master,1,3,i*25+30,15,200,65,'#CCFFFF'))
+                self.words3.append(self.labels(self.master, 1, 3, i*25 + 30, 15, 200, 65, self.COLOR_WORD))
             dif=n3-10
             for i in range (0,dif):
-                self.words3.append(self.labels(self.master,1,3,i*25+30,15,280,65,'#CCFFFF'))
+                self.words3.append(self.labels(self.master, 1, 3, i*25 + 30, 15, 280, 65, self.COLOR_WORD))
         else:
             for i in range (0, n3):
-                self.words3.append(self.labels(self.master,1,3,i*25+30,15,200,65,'#CCFFFF'))           
+                self.words3.append(self.labels(self.master, 1, 3, i*25 + 30, 15, 200, 65, self.COLOR_WORD))           
        
         # Create label for 4-letter words
         n4=len(self.controller.model.four)
-        if(n4>10):
+        if n4 > 10:
             for i in range (0, 10):
-                self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
+                self.words4.append(self.labels(self.master, 1, 4, i*25 + 30, 15, 400, 65, self.COLOR_WORD))
             dif=n4-10
             for i in range (0,dif):
-                self.words4.append(self.labels(self.master,1,4,i*25+30,15,500,65,'#CCFFFF'))
+                self.words4.append(self.labels(self.master, 1, 4, i*25 + 30, 15, 500, 65, self.COLOR_WORD))
         else :
             for i in range (0, n4):
-                self.words4.append(self.labels(self.master,1,4,i*25+30,15,400,65,'#CCFFFF'))
+                self.words4.append(self.labels(self.master, 1, 4, i*25 + 30, 15, 400, 65, self.COLOR_WORD))
       
         # Create label for 5-letter words
-        n5=len(self.controller.model.five)
+        n5 = len(self.controller.model.five)
         for i in range (0, n5):
-            self.words5.append(self.labels(self.master,1,5,i*25+30,15,600,65,'#CCFFFF'))
+            self.words5.append(self.labels(self.master, 1, 5, i*25 + 30, 15, 600, 65, self.COLOR_WORD))
 
         # Create label for 6-letter words
-        n6=len(self.controller.model.six)
+        n6 = len(self.controller.model.six)
         for i in range (0, n6):
-            self.words6.append(self.labels(self.master,1,6,i*25+30,15,700,65,'#CCFFFF'))
+            self.words6.append(self.labels(self.master, 1, 6, i*25 + 30, 15, 700, 65, self.COLOR_WORD))
 
 
     # This function is called to display a given 6-character key on the lower section
     def display_curKey(self, key):  
-        letters=list(key)
+        letters = list(key)
         for i in range (0,6): 
             self.randomlet[i].configure(text=letters[i])
     
@@ -152,13 +160,13 @@ class Game():
     # TO-DO: Peer-review this function
     # This function displays a character on the upper level 
     def type_character(self, word, position):
-        if(len(word)==3):
+        if len(word) == 3:
             rows = self.words3[position]
             for i in range (0,3):
                 key=word[i]
                 rows[i].configure(text=key, background='#191970',foreground='white')
 
-        if(len(word)==4):
+        if len(word) == 4:
             rows = self.words4[position]
             for i in range (0,4):
                 key=word[i]
@@ -212,14 +220,12 @@ class Game():
         for i in range (0,len(word)):
             playword = playword+word[i]
         
-        val = self.controller.play_word(playword)
-        print(val)
+        self.controller.play_word(playword)
       
     
-    # TO-DO: implemented the backspace function
+    # This function removes the most recent letter typed in and put it back to the lower section
     def backspace_function(self, event = None):
-        for i in range(0,len(self.enteredlet)):
-            
+        for i in range(0, len(self.enteredlet)):
             if(self.enteredlet[i]['text']=="_" ):
                 for let in self.randomlet:
                     if (let['text']=='_'):
@@ -247,7 +253,7 @@ class Game():
 
 
     # This function signals the controller to generate a new key for the game 
-    def get_new_key(self):
+    def get_new_key(self, event = None):
         self.controller.get_new_key()
         
     
@@ -274,8 +280,8 @@ class Game():
             key=let['text']
             for word in self.randomlet:
                 if(word['text']=='_'):
-                    word.configure(text=key,background='#008B8B',foreground='white')
-                    let.configure(text='_',background= '#FFEBCD')
+                    word.configure(text = key, background = self.COLOR_RANDOM, foreground='white')
+                    let.configure(text = '_', background = self.COLOR_ENTER)
                     break
         
         
@@ -286,7 +292,7 @@ class Game():
         for ran in self.randomlet:
             if (ran['text']==key):
                 check=True
-                ran.configure(text="_",background='#F8F8FF')
+                ran.configure(text = "_", background='#F8F8FF')
                 for let in self.enteredlet:
                     if (let['text']=="_"):
                         let.configure(text=key,background='pink',foreground='black')
@@ -302,12 +308,14 @@ class Game():
     # This function starts the count-down timer 
     def start_timer(self):
         self.controller.start_timer()
+        self.start.config(state = DISABLED)
     
     
     # This function displays a time (given in second) on the game view
     def display_time(self, time):
         if time < 0:
             self.timer.configure(text = "Time's Up!")
+            print("Your final score is: " + str(self.controller.score))
         else:
             mins = time // 60
             secs = time % 60
