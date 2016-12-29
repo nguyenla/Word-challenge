@@ -1,6 +1,7 @@
 from GameModel import *
 from GameGUI import GameMainView
 import time
+import pyglet
 
 class GameController:
     def __init__(self):
@@ -12,6 +13,10 @@ class GameController:
         self.view.register_controller(self)
         self.view.create_labels()
         self.send_curKey()
+        
+        # Play background music
+        #self.music_player = pyglet.media.load('Lacrimosa.mp3')
+        #self.music_player.play()
 
     # Return the current key of the game
     def get_curKey(self):
@@ -56,6 +61,7 @@ class GameController:
     # and then updates the score in the field
     def increase_score(self, word_score):
         self.score += word_score
+        self.partial_score += word_score
         if word_score == 60: # if the 6-letter word is found, the player can get the next key word
             self.partial_score += 200
         self.view.update_score()
@@ -93,6 +99,5 @@ class GameController:
 def main():
     newGame = GameController()
     newGame.view.master.mainloop()
-
 
 if __name__ == "__main__": main()
