@@ -6,6 +6,7 @@ import random
 from PIL import Image, ImageTk
 from PIL import *
 
+
 class Game():
 
     def __init__(self):
@@ -25,45 +26,48 @@ class Game():
         self.COLOR_RANDOM_FILLED = '#008B8B'
         self.COLOR_ENTER_FILLED = 'pink'
         self.COLOR_WORD_FILLED = '#191970'
-        self.FS = 12 # font size of the letters
+        self.FS = 14 # font size of the letters
         
     #main frame
         s=Style()
         s.theme_use('alt')
-        self.master.minsize(width=700,height=600)
-    #    self.master.resizable(0, 0)
+        self.master.minsize(width=900,height=650)
+        self.master.resizable(0, 0)
         self.master.title("Game")
-        self.master.configure(background='#23B6C0')
-     
-     
-        self.filename=Image.open('snowflakes.jpg','r')
-        self.resized=self.filename.resize((800,700))#resized image-gets the size of the whole frame
+    
+    
+        self.filename=Image.open('snowflakes.jpg')
+        self.resized=self.filename.resize((900,650),Image.ANTIALIAS)#resized image-gets the size of the whole frame
         self.resized2=ImageTk.PhotoImage(self.resized)#creates the photo image from the file
         self.back=Label(self.master,image=self.resized2,anchor=CENTER)#sets the image
-        self.back.pack(fil=BOTH,expand=YES)
-        self.back.bind('<Configure>',self.resize_frame)#binds the Configure to the resize_frame method
+        self.back.place(x=0,y=0,relheight=1,relwidth=1)
+        self.back.pack(fill=BOTH, expand=YES)
+   
        
         # array of labels for letters of the key word
         self.randomlet=[]
-        self.randomlet=self.labels(self.master,0.05,6,500,60,150,70,self.COLOR_RANDOM_FILLED,25)
+        self.randomlet=self.labels(self.master,0.05,6,500,80,150,70,self.COLOR_RANDOM_FILLED,25)
 
         # array of labels for letters entered
         self.enteredlet=[]
-        self.enteredlet=self.labels(self.master,0.05,6,400,60,150,70,self.COLOR_ENTER_EMPTY,25)
+        self.enteredlet=self.labels(self.master,0.05,6,400,80,150,70,self.COLOR_ENTER_EMPTY,25)
     
     
 
     # LABELS ON VIEW
         #score
-        self.score=Label(self.master, text='Score: 0',foreground='white')
-    
+        self.score=Label(self.master, text='Score: 0',foreground='#223245',background='#7dd4e4',font=('Symbol',22),anchor=CENTER)
         self.score.pack()
-        self.score.place(x=50,y=550)
+        self.score.place(x=100,y=525,relwidth=0.13,relheight=0.07,anchor=CENTER)
         #timer
-        self.timer=Label(self.master,text="2:00",background='blue')
+        self.timer=Label(self.master,text="2:00",background='#2929a3',foreground='#ffffcc',font=('Symbol',22),anchor=CENTER)
         self.timer.pack()
-        self.timer.place(x=800,y=550)
-        self.timer.configure(foreground='yellow')
+        self.timer.place(x=800,y=525,relwidth=0.13,relheight=0.07,anchor=CENTER)
+        #feedback
+        self.feedback=Label(self.master, text='Some Feedback', foreground='#223246',background='#7dd4e4',font=('Symbol',16),anchor=CENTER)
+        self.feedback.pack()
+        self.feedback.place(x=100,y=430,relwidth=0.17,relheight=0.05,anchor=CENTER)
+        
 
         # BUTTONS ON VIEW
         
@@ -104,15 +108,7 @@ class Game():
         self.master.bind("<BackSpace>", self.backspace_function)
         self.master.bind("<Tab>", self.get_new_key)
         self.master.bind("<Key>", self.key)
-        
-     # resize the image together with the background label and the window   
-    def resize_frame(self,event = None):
-
-        self.new_width=self.master.winfo_width()
-        self.new_height= self.master.winfo_height()
-        self.image=self.resized.resize((self.new_width,self.new_height),Image.ANTIALIAS)
-        self.photo=ImageTk.PhotoImage(self.image)
-        self.back.configure(image=self.photo)
+      
     
     # This function binds a controller to this view
     def register_controller(self, controller):
@@ -122,7 +118,7 @@ class Game():
     # Every time a new key is generated, this function is called to generate new blank labels
     # that hold the place for the words that can be formed from the new key
     def create_labels(self):
-        label_size=0.014
+        label_size=0.018
         # Destroy all the old labels and reset all the fields
         for label in self.words3:
             for l in label:
@@ -147,37 +143,37 @@ class Game():
         
         # Create label for 3-letter words
         n3 = len(self.controller.model.three)
-        if n3 > 10:
-            for i in range (0, 10):
-                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 30, 15, 200, 65, self.COLOR_WORD_EMPTY, self.FS))
-            dif=n3-10
+        if n3 > 12:
+            for i in range (0, 12):
+                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 40, 18, 160, 65, self.COLOR_WORD_EMPTY, self.FS))
+            dif=n3-12
             for i in range (0,dif):
-                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 30, 15, 280, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 40, 18, 240, 65, self.COLOR_WORD_EMPTY, self.FS))
         else:
             for i in range (0, n3):
-                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 30, 15, 200, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 40, 18, 160, 65, self.COLOR_WORD_EMPTY, self.FS))
        
         # Create label for 4-letter words
         n4=len(self.controller.model.four)
-        if n4 > 10:
-            for i in range (0, 10):
-                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 30, 15, 400, 65, self.COLOR_WORD_EMPTY, self.FS))
-            dif=n4-10
+        if n4 > 12:
+            for i in range (0, 12):
+                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 40, 18, 360, 65, self.COLOR_WORD_EMPTY, self.FS))
+            dif=n4-12
             for i in range (0,dif):
-                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 30, 15, 500, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 40, 18, 460, 65, self.COLOR_WORD_EMPTY, self.FS))
         else :
             for i in range (0, n4):
-                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 30, 15, 400, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 40, 18, 360, 65, self.COLOR_WORD_EMPTY, self.FS))
       
         # Create label for 5-letter words
         n5 = len(self.controller.model.five)
         for i in range (0, n5):
-            self.words5.append(self.labels(self.master, label_size, 5, i*25 + 30, 15, 600, 65, self.COLOR_WORD_EMPTY, self.FS))
+            self.words5.append(self.labels(self.master, label_size, 5, i*25 + 40, 18, 560, 65, self.COLOR_WORD_EMPTY, self.FS))
 
         # Create label for 6-letter words
         n6 = len(self.controller.model.six)
         for i in range (0, n6):
-            self.words6.append(self.labels(self.master, label_size, 6, i*25 + 30, 15, 700, 65, self.COLOR_WORD_EMPTY, self.FS))
+            self.words6.append(self.labels(self.master, label_size, 6, i*25 + 40, 18, 660, 65, self.COLOR_WORD_EMPTY, self.FS))
 
 
 
@@ -227,7 +223,7 @@ class Game():
     def labels(self, master, s, number, pos, dist, start, word, color, fs):
         labels=[]
         for i in range (0,number):
-            labels.append(Label(master, text = '_', anchor = CENTER, font = ("Times New Roman", fs)))
+            labels.append(Label(master, text = '_', anchor = CENTER, font = ('Symbol', fs)))
             labels[i].pack(fill = BOTH, expand = YES)
             prev = start
             labels[0].place(x=prev, y= int(pos),relheight=1.5*s,relwidth=s)
