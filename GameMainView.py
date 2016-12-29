@@ -28,9 +28,6 @@ class GameMainView(Frame):
         s = Style()
         s.theme_use('alt')
 
-        self.master.minsize(width=900,height=650)
-        self.master.resizable(0, 0)
-        self.master.title("Game")
         self.filename=Image.open('snowflakes.jpg')
         self.resized=self.filename.resize((900,650),Image.ANTIALIAS)#resized image-gets the size of the whole frame
         self.resized2=ImageTk.PhotoImage(self.resized)#creates the photo image from the file
@@ -98,11 +95,11 @@ class GameMainView(Frame):
         self.words6=[]
 
         # binding keys to buttons
-        self.bind("<Return>", self.enter_function)
-        self.bind("<space>", self.shuffle_function)
-        self.bind("<BackSpace>", self.backspace_function)
-        self.bind("<Tab>", self.get_new_key)
-        self.bind("<Key>", self.key)
+        self.master.bind("<Return>", self.enter_function)
+        self.master.bind("<space>", self.shuffle_function)
+        self.master.bind("<BackSpace>", self.backspace_function)
+        self.master.bind("<Tab>", self.get_new_key)
+        self.master.bind("<Key>", self.key)
         self.pack()
 
     # This function binds a controller to this view
@@ -168,6 +165,10 @@ class GameMainView(Frame):
         for i in range (0, n5):
             self.words5.append(self.labels(self, label_size, 5, i*25 + 40, 18, 560, 65, self.COLOR_WORD_EMPTY, self.FS))
 
+        # Create label for 5-letter words
+        n6 = len(self.controller.model.six)
+        for i in range (0, n6):
+            self.words6.append(self.labels(self, label_size, 6, i*25 + 40, 18, 660, 65, self.COLOR_WORD_EMPTY, self.FS))
 
 
     # This function is called to display a given 6-character key on the lower section

@@ -1,5 +1,5 @@
 from GameModel import *
-from GameGUI import GameMainView
+from GameMainView import GameMainView
 from GameStartView import *
 from GameEndView import *
 from tkinter import Tk
@@ -10,9 +10,10 @@ class GameController:
     def __init__(self):
         self.model = GameModel()
         root = Tk()
-        root.minsize(width = 700, height = 600)
-        root.title("Game")
+        root.minsize(width = 900, height = 650)
+        root.title("Word Challenge")
         root.configure(background='#23B6C0')
+        root.resizable(0, 0)
         self.root = root
         
         self.view = GameStartView(root)
@@ -21,7 +22,6 @@ class GameController:
         self.time_remaining = 120
         self.view.register_controller(self)
         self.view.pack()
-        
         
         # Play background music
         #self.music_player = pyglet.media.load('Lacrimosa.mp3')
