@@ -1,18 +1,18 @@
 from GameModel import *
-from GameGUI import Game
+from GameGUI import GameMainView
 import time
 
 class GameController:
     def __init__(self):
         self.model = GameModel()
-       
-        self.view = Game()
+        self.view = GameMainView()
         self.score = 0
+        self.partial_score = 0 # score earned from current key word
         self.time_remaining = 120
         self.view.register_controller(self)
         self.view.create_labels()
         self.send_curKey()
-        
+
     # Return the current key of the game
     def get_curKey(self):
         return self.model.curKey
@@ -20,7 +20,7 @@ class GameController:
     # Display the current key of the game on the view
     def send_curKey(self):
         self.view.display_curKey(self.get_curKey())
-        
+
     # This function plays a word to the model
     def play_word(self, word):
         position = 0 # the position of the word in the corresponding sorted list, if it is in the list
@@ -36,7 +36,7 @@ class GameController:
         elif len(word) == 6:
             if word in self.model.six_fixed:
                 position = self.model.six_fixed.index(word)
-        
+
         # Increase the score and the time remaining
         word_score = self.model.play_word(word)
         if word_score > 0:
@@ -51,20 +51,22 @@ class GameController:
             print("Invalid word") # replace later with other feedback
         self.view.reset_input()
         return word_score
-    
+
     # This function increases the score by the amount specified by word_score,
     # and then updates the score in the field
     def increase_score(self, word_score):
         self.score += word_score
+        if word_score == 60: # if the 6-letter word is found, the player can get the next key word
+            self.partial_score += 200
         self.view.update_score()
-        
+
     # This function increases the time remaining by the amount specified by the parameter time,
     # and then updates the time in the field
     def increase_time(self, time):
         self.time_remaining += time
         self.view.display_time(self.time_remaining)
-    
-    
+
+
     # This function starts the timer
     def start_timer(self):
         if self.time_remaining <= 0:
@@ -73,18 +75,24 @@ class GameController:
             self.view.display_time(self.time_remaining)
             self.time_remaining -= 1
             self.view.master.after(1000, self.start_timer)
-    
+
     # This function generates and displays a new key for the game
     def get_new_key(self):
-        self.model.get_next_key() 
-        self.view.reset_input() # reset the input area on the game view
-        self.send_curKey() # display the new key on the game view
-        self.view.create_labels() # reset the labels that hold the words formed
-        
+        # The player can only get a new key word after scoring at least 200 points from the current key word
+        if self.partial_score >= 200:
+            self.partial_score = 0
+            self.model.get_next_key()
+            self.view.reset_input() # reset the input area on the game view
+            self.send_curKey() # display the new key on the game view
+            self.view.create_labels() # reset the labels that hold the words formed
+        else:
+            print("You need to score 200 points from the current key word before you can get another key word.")
+            print("Your current partial score is: " + str(self.partial_score))
+
 
 def main():
     newGame = GameController()
     newGame.view.master.mainloop()
-   
 
-if __name__ == "__main__": main()    
+
+if __name__ == "__main__": main()
