@@ -7,16 +7,12 @@ from PIL import Image, ImageTk
 from PIL import *
 
 
-class GameMainView():
-
-    def __init__(self):
-        self.model=GameModel()
-        self.master = Tk()
+class GameMainView(Frame):
+    def __init__(self, parent):
+        Frame.__init__(self, parent)
+        self.model = GameModel()
+        self.master = parent
         self.controller = None
-
-        #mainframe
-    #   self.filename=Image.open('/Users/Catalina/Documents/workspace/Word-Challenge/snowflakes.jpg','r')
-    #   self.filename2=ImageTk.PhotoImage(self.filename)
 
         # Color values declared as constants
         self.COLOR_RANDOM_EMPTY = '#F8F8FF' # background color of the labels for the keyword
@@ -38,31 +34,33 @@ class GameMainView():
         self.filename=Image.open('snowflakes.jpg')
         self.resized=self.filename.resize((900,650),Image.ANTIALIAS)#resized image-gets the size of the whole frame
         self.resized2=ImageTk.PhotoImage(self.resized)#creates the photo image from the file
-        self.back=Label(self.master,image=self.resized2,anchor=CENTER)#sets the image
+        self.back=Label(self,image=self.resized2,anchor=CENTER)#sets the image
         self.back.place(x=0,y=0,relheight=1,relwidth=1)
         self.back.pack(fill=BOTH, expand=YES)
 
         # array of labels for letters of the key word
         self.randomlet=[]
-        self.randomlet=self.labels(self.master,0.05,6,500,80,150,70,self.COLOR_RANDOM_FILLED,25)
+        self.randomlet=self.labels(self,0.05,6,500,80,150,70,self.COLOR_RANDOM_FILLED,25)
 
         # array of labels for letters entered
         self.enteredlet=[]
-        self.enteredlet=self.labels(self.master,0.05,6,400,80,150,70,self.COLOR_ENTER_EMPTY,25)
+        self.enteredlet=self.labels(self,0.05,6,400,80,150,70,self.COLOR_ENTER_EMPTY,25)
 
 
 
     # LABELS ON VIEW
         #score
-        self.score=Label(self.master, text='Score: 0',foreground='#223245',background='#7dd4e4',font=('Symbol',22),anchor=CENTER)
+        self.score=Label(self, text='Score: 0',foreground='#223245',background='#7dd4e4',font=('Symbol',22),anchor=CENTER)
         self.score.pack()
         self.score.place(x=100,y=525,relwidth=0.13,relheight=0.07,anchor=CENTER)
+
         #timer
-        self.timer=Label(self.master,text="2:00",background='#2929a3',foreground='#ffffcc',font=('Symbol',22),anchor=CENTER)
+        self.timer=Label(self,text="2:00",background='#2929a3',foreground='#ffffcc',font=('Symbol',22),anchor=CENTER)
         self.timer.pack()
         self.timer.place(x=800,y=525,relwidth=0.13,relheight=0.07,anchor=CENTER)
+
         #feedback
-        self.feedback=Label(self.master, text='Some Feedback', foreground='#223246',background='#7dd4e4',font=('Symbol',16),anchor=CENTER)
+        self.feedback=Label(self, text='Some Feedback', foreground='#223246',background='#7dd4e4',font=('Symbol',16),anchor=CENTER)
         self.feedback.pack()
         self.feedback.place(x=100,y=430,relwidth=0.17,relheight=0.05,anchor=CENTER)
 
@@ -72,24 +70,24 @@ class GameMainView():
         bstyle.configure('B.TButton',background='red')
 
         # Enter button
-        self.enter=Button(self.master,text="enter",width=6)
+        self.enter=Button(self,text="enter",width=6)
         self.enter.pack()
         self.enter.place(x=400, y=600,anchor=CENTER)
         self.enter.configure(style='B.TButton')
 
         # Shuffle button
-        self.shuffle=Button(self.master,text="shuffle",width=6)
+        self.shuffle=Button(self,text="shuffle",width=6)
         self.shuffle.pack()
         self.shuffle.configure(style='green.TButton')
         self.shuffle.place(x=500,y=600,anchor=CENTER)
 
         # New button
-        self.getnew=Button(self.master,text="New",width=6)
+        self.getnew=Button(self,text="New",width=6, command = self.end_game)
         self.getnew.pack()
         self.getnew.place(x=600,y=600,anchor=CENTER)
 
         # Start button
-        self.start = Button(self.master, text = "Start", width=6, command = self.start_timer)
+        self.start = Button(self, text = "Start", width=6, command = self.start_timer)
         self.start.pack()
         self.start.place(x=300,y=600,anchor=CENTER)
 
@@ -100,11 +98,12 @@ class GameMainView():
         self.words6=[]
 
         # binding keys to buttons
-        self.master.bind("<Return>", self.enter_function)
-        self.master.bind("<space>", self.shuffle_function)
-        self.master.bind("<BackSpace>", self.backspace_function)
-        self.master.bind("<Tab>", self.get_new_key)
-        self.master.bind("<Key>", self.key)
+        self.bind("<Return>", self.enter_function)
+        self.bind("<space>", self.shuffle_function)
+        self.bind("<BackSpace>", self.backspace_function)
+        self.bind("<Tab>", self.get_new_key)
+        self.bind("<Key>", self.key)
+        self.pack()
 
     # This function binds a controller to this view
     def register_controller(self, controller):
@@ -142,37 +141,32 @@ class GameMainView():
 
         if n3 > 12:
             for i in range (0, 12):
-                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 40, 18, 160, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words3.append(self.labels(self, label_size, 3, i*25 + 40, 18, 160, 65, self.COLOR_WORD_EMPTY, self.FS))
             dif=n3-12
 
             for i in range (0,dif):
-                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 40, 18, 240, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words3.append(self.labels(self, label_size, 3, i*25 + 40, 18, 240, 65, self.COLOR_WORD_EMPTY, self.FS))
         else:
             for i in range (0, n3):
-                self.words3.append(self.labels(self.master, label_size, 3, i*25 + 40, 18, 160, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words3.append(self.labels(self, label_size, 3, i*25 + 40, 18, 160, 65, self.COLOR_WORD_EMPTY, self.FS))
 
         # Create label for 4-letter words
         n4=len(self.controller.model.four)
         if n4 > 12:
             for i in range (0, 12):
-                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 40, 18, 360, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words4.append(self.labels(self, label_size, 4, i*25 + 40, 18, 360, 65, self.COLOR_WORD_EMPTY, self.FS))
             dif=n4-12
 
             for i in range (0,dif):
-                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 40, 18, 460, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words4.append(self.labels(self, label_size, 4, i*25 + 40, 18, 460, 65, self.COLOR_WORD_EMPTY, self.FS))
         else :
             for i in range (0, n4):
-                self.words4.append(self.labels(self.master, label_size, 4, i*25 + 40, 18, 360, 65, self.COLOR_WORD_EMPTY, self.FS))
+                self.words4.append(self.labels(self, label_size, 4, i*25 + 40, 18, 360, 65, self.COLOR_WORD_EMPTY, self.FS))
 
         # Create label for 5-letter words
         n5 = len(self.controller.model.five)
         for i in range (0, n5):
-            self.words5.append(self.labels(self.master, label_size, 5, i*25 + 40, 18, 560, 65, self.COLOR_WORD_EMPTY, self.FS))
-
-        # Create label for 6-letter words
-        n6 = len(self.controller.model.six)
-        for i in range (0, n6):
-            self.words6.append(self.labels(self.master, label_size, 6, i*25 + 40, 18, 660, 65, self.COLOR_WORD_EMPTY, self.FS))
+            self.words5.append(self.labels(self, label_size, 5, i*25 + 40, 18, 560, 65, self.COLOR_WORD_EMPTY, self.FS))
 
 
 
@@ -307,7 +301,7 @@ class GameMainView():
         self.timer['text'] = count
         if count > 0:
             print(count)
-            self.master.after(1000, self.update_clock(count-1))
+            self.after(1000, self.update_clock(count-1))
 
 
 
@@ -352,6 +346,7 @@ class GameMainView():
     def display_time(self, time):
         if time < 0:
             self.timer.configure(text = "Time's Up!")
+            self.controller.end_game()
             print("Your final score is: " + str(self.controller.score))
         else:
             mins = time // 60
@@ -363,9 +358,12 @@ class GameMainView():
                 secstr = str(secs)
             self.timer.configure(text = str(mins) + ":" + secstr)
 
+    def end_game(self):
+        self.controller.end_game()
 
 
 def main():
-    mygame=GameMainView()
+    root = Tk()
+    mygame=GameMainView(root)
     mygame.master.mainloop()
 if __name__ == "__main__": main()

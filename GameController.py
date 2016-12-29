@@ -1,23 +1,41 @@
 from GameModel import *
 from GameGUI import GameMainView
+from GameStartView import *
+from GameEndView import *
+from tkinter import Tk
 import time
 import pyglet
 
 class GameController:
     def __init__(self):
         self.model = GameModel()
-        self.view = GameMainView()
+        root = Tk()
+        root.minsize(width = 700, height = 600)
+        root.title("Game")
+        root.configure(background='#23B6C0')
+        self.root = root
+        
+        self.view = GameStartView(root)
         self.score = 0
         self.partial_score = 0 # score earned from current key word
         self.time_remaining = 120
         self.view.register_controller(self)
-        self.view.create_labels()
-        self.send_curKey()
+        self.view.pack()
+        
         
         # Play background music
         #self.music_player = pyglet.media.load('Lacrimosa.mp3')
         #self.music_player.play()
 
+    def create_game(self):
+        main_view = GameMainView(self.root)
+        main_view.register_controller(self)
+        self.view.destroy()
+        self.view = main_view
+        self.view.create_labels()
+        self.send_curKey()
+        self.view.pack()
+    
     # Return the current key of the game
     def get_curKey(self):
         return self.model.curKey
@@ -95,9 +113,15 @@ class GameController:
             print("You need to score 200 points from the current key word before you can get another key word.")
             print("Your current partial score is: " + str(self.partial_score))
 
+    def end_game(self):
+        print("The game ended.")
+        end_view = GameEndView(self.view.master, self)
+        self.view.destroy()
+        self.view = end_view
+        self.view.tkraise()
 
 def main():
     newGame = GameController()
-    newGame.view.master.mainloop()
+    newGame.view.mainloop()
 
 if __name__ == "__main__": main()
