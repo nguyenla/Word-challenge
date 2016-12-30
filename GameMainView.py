@@ -28,71 +28,72 @@ class GameMainView(Frame):
         s = Style()
         s.theme_use('alt')
 
-        self.filename=Image.open('snowflakes.jpg')
-        self.resized=self.filename.resize((900,650),Image.ANTIALIAS)#resized image-gets the size of the whole frame
-        self.resized2=ImageTk.PhotoImage(self.resized)#creates the photo image from the file
-        self.back=Label(self,image=self.resized2,anchor=CENTER)#sets the image
-        self.back.place(x=0,y=0,relheight=1,relwidth=1)
-        self.back.pack(fill=BOTH, expand=YES)
+        self.filename = Image.open('snowflakes.jpg')
+        self.resized = self.filename.resize((900, 650), Image.ANTIALIAS) # resized image-gets the size of the whole frame
+        self.resized2 = ImageTk.PhotoImage(self.resized)#creates the photo image from the file
+        self.back = Label(self, image = self.resized2, anchor = CENTER)#sets the image
+        self.back.place(x = 0, y = 0, relheight = 1, relwidth = 1)
+        self.back.pack(fill = BOTH, expand = YES)
 
         # array of labels for letters of the key word
-        self.randomlet=[]
-        self.randomlet=self.labels(self,0.05,6,500,80,150,70,self.COLOR_RANDOM_FILLED,25)
+        self.randomlet = []
+        self.randomlet = self.labels(self, 0.05, 6, 500, 80, 150, 70, self.COLOR_RANDOM_FILLED, 25)
 
         # array of labels for letters entered
-        self.enteredlet=[]
-        self.enteredlet=self.labels(self,0.05,6,400,80,150,70,self.COLOR_ENTER_EMPTY,25)
+        self.enteredlet = []
+        self.enteredlet = self.labels(self, 0.05, 6, 400, 80, 150, 70, self.COLOR_ENTER_EMPTY, 25)
 
 
 
     # LABELS ON VIEW
         #score
-        self.score=Label(self, text='Score: 0',foreground='#223245',background='#7dd4e4',font=('Symbol',22),anchor=CENTER)
+        self.score = Label(self, text = 'Score: 0', foreground = '#223245', background = '#7dd4e4', font = ('Symbol', 22), anchor = CENTER)
         self.score.pack()
-        self.score.place(x=100,y=525,relwidth=0.13,relheight=0.07,anchor=CENTER)
+        self.score.place(x = 100, y = 525, relwidth = 0.13, relheight = 0.07, anchor = CENTER)
 
         #timer
-        self.timer=Label(self,text="2:00",background='#2929a3',foreground='#ffffcc',font=('Symbol',22),anchor=CENTER)
+        self.timer = Label(self, text = "2:00", background = '#2929a3', foreground = '#ffffcc', font = ('Symbol', 22), anchor = CENTER)
         self.timer.pack()
-        self.timer.place(x=800,y=525,relwidth=0.13,relheight=0.07,anchor=CENTER)
+        self.timer.place(x = 800, y = 525, relwidth = 0.13, relheight = 0.07, anchor = CENTER)
 
         #feedback
-        self.feedback=Label(self, text='Some Feedback', foreground='#223246',background='#7dd4e4',font=('Symbol',16),anchor=CENTER)
+        self.feedback = Label(self, text = 'Some Feedback', foreground = '#223246', background = '#7dd4e4', font = ('Symbol', 16), anchor = CENTER)
         self.feedback.pack()
-        self.feedback.place(x=100,y=430,relwidth=0.17,relheight=0.05,anchor=CENTER)
+        self.feedback.place(x = 100, y = 430, relwidth = 0.17, relheight = 0.05, anchor = CENTER)
 
         # BUTTONS ON VIEW
 
-        bstyle=Style()
-        bstyle.configure('B.TButton',background='red')
+        bstyle = Style()
+        bstyle.configure('B.TButton',background = 'red')
 
         # Enter button
-        self.enter=Button(self,text="enter",width=6)
+        self.enter=Button(self, text = "enter", width = 6)
         self.enter.pack()
-        self.enter.place(x=400, y=600,anchor=CENTER)
+        self.enter.place(x = 400, y = 600, anchor = CENTER)
         self.enter.configure(style='B.TButton')
 
         # Shuffle button
-        self.shuffle=Button(self,text="shuffle",width=6)
+        self.shuffle=Button(self, text = "shuffle", width = 6)
         self.shuffle.pack()
-        self.shuffle.configure(style='green.TButton')
-        self.shuffle.place(x=500,y=600,anchor=CENTER)
+        self.shuffle.configure(style = 'green.TButton')
+        self.shuffle.place(x = 500, y = 600, anchor = CENTER)
 
         # New button
-        self.getnew=Button(self,text="New",width=6, command = self.end_game)
+        self.getnew = Button(self, text = "New", width = 6)
+#         self.getnew = Button(self, text = "New", width = 6, command = self.end_game)
         self.getnew.pack()
-        self.getnew.place(x=600,y=600,anchor=CENTER)
+        self.getnew.place(x = 600, y = 600, anchor = CENTER)
 
         # Start button
-        self.start = Button(self, text = "Start", width=6, command = self.start_timer)
+        self.start = Button(self, text = "Start", width = 6)
         self.start.pack()
-        self.start.place(x=300,y=600,anchor=CENTER)
+        self.start.place(x = 300, y = 600, anchor = CENTER)
 
         # fields that hold labels for words of each length
-        self.words3=[]
-        self.words4=[]
-        self.words5=[]
-        self.words6=[]
+        self.words3 = []
+        self.words4 = []
+        self.words5 = []
+        self.words6 = []
 
         # binding keys to buttons
         self.master.bind("<Return>", self.enter_function)
@@ -175,7 +176,7 @@ class GameMainView(Frame):
     def display_curKey(self, key):
         letters = list(key)
         for i in range (0,6):
-            self.randomlet[i].configure(text=letters[i])
+            self.randomlet[i].configure(text = letters[i])
             if letters[i] == '_':
                 self.randomlet[i].configure(background = self.COLOR_RANDOM_EMPTY)
             else:
@@ -188,26 +189,26 @@ class GameMainView(Frame):
         if len(word) == 3:
             rows = self.words3[position]
             for i in range (0,3):
-                key=word[i]
-                rows[i].configure(text=key, background = self.COLOR_WORD_FILLED, foreground='white')
+                key = word[i]
+                rows[i].configure(text = key, background = self.COLOR_WORD_FILLED, foreground='white')
 
         if len(word) == 4:
             rows = self.words4[position]
             for i in range (0,4):
-                key=word[i]
-                rows[i].configure(text=key, background = self.COLOR_WORD_FILLED, foreground='white')
+                key = word[i]
+                rows[i].configure(text = key, background = self.COLOR_WORD_FILLED, foreground='white')
 
         if len(word) == 5:
             rows = self.words5[position]
             for i in range (0,5):
-                key=word[i]
-                rows[i].configure(text=key, background = self.COLOR_WORD_FILLED, foreground='white')
+                key = word[i]
+                rows[i].configure(text = key, background = self.COLOR_WORD_FILLED, foreground='white')
 
         if len(word) == 6:
             rows = self.words6[position]
             for i in range (0,6):
-                key=word[i]
-                rows[i].configure(text=key, background = self.COLOR_WORD_FILLED, foreground='white')
+                key = word[i]
+                rows[i].configure(text = key, background = self.COLOR_WORD_FILLED, foreground='white')
 
 
 

@@ -27,6 +27,7 @@ class GameController:
         #self.music_player = pyglet.media.load('Lacrimosa.mp3')
         #self.music_player.play()
 
+    # This functions removes the start view, creates a new game and renders a new main view
     def create_game(self):
         main_view = GameMainView(self.root)
         main_view.register_controller(self)
@@ -35,6 +36,7 @@ class GameController:
         self.view.create_labels()
         self.send_curKey()
         self.view.pack()
+        self.start_timer()
     
     # Return the current key of the game
     def get_curKey(self):
@@ -113,6 +115,8 @@ class GameController:
             print("You need to score 200 points from the current key word before you can get another key word.")
             print("Your current partial score is: " + str(self.partial_score))
 
+
+    # This function ends the current game, removes the main view, and renders the end view
     def end_game(self):
         print("The game ended.")
         end_view = GameEndView(self.view.master, self)
