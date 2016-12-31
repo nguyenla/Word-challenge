@@ -1,10 +1,10 @@
 from GameModel import *
-from GameMainView import GameMainView
+from GameMainView import *
 from GameStartView import *
 from GameEndView import *
 from tkinter import Tk
 import time
-import pyglet
+#import pyglet
 
 class GameController:
     def __init__(self):

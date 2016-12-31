@@ -63,31 +63,32 @@ class GameMainView(Frame):
 
         # BUTTONS ON VIEW
 
-        bstyle = Style()
-        bstyle.configure('B.TButton',background = 'red')
+       # bstyle = Style()
+       # bstyle.configure('B.TButton',background = 'red')
 
         # Enter button
-        self.enter=Button(self, text = "enter", width = 6)
-        self.enter.pack()
-        self.enter.place(x = 400, y = 600, anchor = CENTER)
-        self.enter.configure(style='B.TButton')
+      #  self.enter=Button(self, text = "enter", width = 6)
+      #  self.enter.pack()
+      #  self.enter.place(x = 400, y = 600, anchor = CENTER)
+      #  self.enter.configure(style='B.TButton')
 
         # Shuffle button
-        self.shuffle=Button(self, text = "shuffle", width = 6)
-        self.shuffle.pack()
-        self.shuffle.configure(style = 'green.TButton')
-        self.shuffle.place(x = 500, y = 600, anchor = CENTER)
+      #  bstyle.configure('green.TButton',background = 'green')
+       # self.shuffle=Button(self, text = "shuffle", width = 6)
+        #self.shuffle.pack()
+        #self.shuffle.configure(style = 'green.TButton')
+        #self.shuffle.place(x = 500, y = 600, anchor = CENTER)
 
         # New button
-        self.getnew = Button(self, text = "New", width = 6)
-#         self.getnew = Button(self, text = "New", width = 6, command = self.end_game)
-        self.getnew.pack()
-        self.getnew.place(x = 600, y = 600, anchor = CENTER)
+       # self.getnew = Button(self, text = "New", width = 6)
+#      #   self.getnew = Button(self, text = "New", width = 6, command = self.end_game)
+       # self.getnew.pack()
+       # self.getnew.place(x = 600, y = 600, anchor = CENTER)
 
         # Start button
-        self.start = Button(self, text = "Start", width = 6)
-        self.start.pack()
-        self.start.place(x = 300, y = 600, anchor = CENTER)
+       # self.start = Button(self, text = "Start", width = 6)
+       # self.start.pack()
+       # self.start.place(x = 300, y = 600, anchor = CENTER)
 
         # fields that hold labels for words of each length
         self.words3 = []
